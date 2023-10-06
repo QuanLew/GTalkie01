@@ -10,6 +10,7 @@ import { store } from "./redux/store";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
 import ForgotPassword from "./app/screens/ForgotPassword";
+import SendEmail from "./app/screens/SendEmail";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function app() {
                     { user ?
                         <Stack.Navigator>
                             <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
+                            <Stack.Screen options={{headerShown: false}} name='SendEmail' component={SendEmail} />
                         </Stack.Navigator>
                     : ( 
                         <Stack.Navigator>

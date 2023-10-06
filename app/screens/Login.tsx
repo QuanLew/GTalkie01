@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
 import React, { useState } from 'react'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConfig'
@@ -7,10 +7,12 @@ import { auth } from '../../firebaseConfig'
 const Login = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
         if(email && password){
             try {
+                setLoading('true')
                 const user = await signInWithEmailAndPassword(auth, email, password);
                 console.log("Login: ", user)
             } catch(e) {
@@ -25,6 +27,7 @@ const Login = ({ navigation }: any) => {
     return (
         <View>
             <View>
+                <Image source={require('../../assets/images/robot.png')} />
                 <Text>Welcome to G-Talkie</Text>
                 <Text>Make our life become easier</Text>
             </View>
