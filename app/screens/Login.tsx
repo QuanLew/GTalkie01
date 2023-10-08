@@ -12,7 +12,7 @@ const Login = ({ navigation }: any) => {
     const handleSubmit = async () => {
         if(email && password){
             try {
-                setLoading('true')
+                setLoading(true)
                 const user = await signInWithEmailAndPassword(auth, email, password);
                 console.log("Login: ", user)
             } catch(e) {
