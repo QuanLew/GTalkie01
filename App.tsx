@@ -11,6 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
 import ForgotPassword from "./app/screens/ForgotPassword";
 import SendEmail from "./app/screens/SendEmail";
+import Toast from 'react-native-toast-message';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,7 @@ export default function app() {
                     }
                 </Provider>
             </NavigationContainer>
+
         </GestureHandlerRootView>
     );
   }

@@ -14,7 +14,7 @@ const SendEmail = ({ navigation }: any) => {
 
     const handleSubmit = async (e) => {
         if (!recipients || !subject || !content) {
-            console.log('Please fill recipients, subject and content')
+            console.log('Recipients, subject or message is missing.')
         }
         try {
             setLoading(true);
