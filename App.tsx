@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
 import ForgotPassword from "./app/screens/ForgotPassword";
 import SendEmail from "./app/screens/SendEmail";
-import Toast from 'react-native-toast-message';
+import Profile from "./app/screens/Profile";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +37,8 @@ export default function app() {
                         <Stack.Navigator>
                             <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
                             <Stack.Screen options={{headerShown: false}} name='SendEmail' component={SendEmail} />
+                            <Stack.Screen options={{headerShown: false}} name='Profile' component={Profile} />
+
                         </Stack.Navigator>
                     : ( 
                         <Stack.Navigator>

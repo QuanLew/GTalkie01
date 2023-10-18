@@ -2,11 +2,17 @@ import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
 import React, { useState } from 'react'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConfig'
+import Dialog from "react-native-dialog";
 
 const Login = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+
+    const showDialog = () => {
+        setVisible(true);
+    };
 
     const handleSubmit = async () => {
         if(email && password){
@@ -19,6 +25,7 @@ const Login = ({ navigation }: any) => {
             }
         } else {
             // show error
+            showDialog()
             console.log("Missing email or password")
         }
     };
@@ -42,6 +49,12 @@ const Login = ({ navigation }: any) => {
                 <View>
                     <TouchableOpacity onPress={handleSubmit} >
                         <Text>LOGIN</Text>
+                        <Dialog.Container visible={visible} onBackdropPress={() => setVisible(false)}>
+                            <Dialog.Title>Error</Dialog.Title>
+                            <Dialog.Description>
+                                Email address and password is required.
+                            </Dialog.Description>
+                        </Dialog.Container>
                     </TouchableOpacity>
                             
                     <Text>OR</Text>

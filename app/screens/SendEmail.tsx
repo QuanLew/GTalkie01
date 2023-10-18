@@ -1,14 +1,21 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import GoBack from '../components/GoBack'
-import axios from 'axios'
 import { auth } from '../../firebaseConfig'
+import Dialog from "react-native-dialog";
+
 
 const SendEmail = ({ navigation }: any) => {
     const [recipients, setRecipients] = useState('');
     const [subject, setSubject] = useState('');
     const [content, setContent] = useState('');
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+
+    const showDialog = () => {
+        setVisible(true);
+    };
+
 
     const sender = auth.currentUser.email;
 
@@ -16,20 +23,21 @@ const SendEmail = ({ navigation }: any) => {
         if (!recipients || !subject || !content) {
             console.log('Recipients, subject or message is missing.')
         }
-        try {
-            setLoading(true);
-            const data = await axios.post("http://localhost:4000/api/email", {
-                sender,
-                recipients,
-                subject,
-                content
-            });
-            setLoading(false);
-            //toast.success(data.message);
-        } catch (e) {
-            console.log(e.response.data.message);
-            setLoading(false);
-        }
+        showDialog();
+        // try {
+        //     setLoading(true);
+        //     const data = await axios.post("http://localhost:4000/api/email", {
+        //         sender,
+        //         recipients,
+        //         subject,
+        //         content
+        //     });
+        //     setLoading(false);
+        //     <Success />
+        // } catch (e) {
+        //     console.log(e.response.data.message);
+        //     setLoading(false);
+        // }
     }
 
     return (
@@ -54,6 +62,12 @@ const SendEmail = ({ navigation }: any) => {
 
             <TouchableOpacity onPress={handleSubmit}>
                 <Text>Send</Text>
+                <Dialog.Container visible={visible} onBackdropPress={() => setVisible(false)}>
+                    <Dialog.Title>Oops</Dialog.Title>
+                    <Dialog.Description>
+                        Email address and password is required.
+                    </Dialog.Description>
+                </Dialog.Container>
             </TouchableOpacity>
         </View>
     )

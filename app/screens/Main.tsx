@@ -17,6 +17,10 @@ const Main = ({ navigation }: any) => {
         </TouchableOpacity>
       </View>
 
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <Text>Profile</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity onPress={() => navigation.navigate('SendEmail')}>
         <Text>Send Email</Text>
       </TouchableOpacity>

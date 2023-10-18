@@ -3,7 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 // Define the initial state using that type
 const initialState = {
   user: null,
-  userLoading: false
+  userLoading: false,
+  email: null,
+  image: null
 }
 
 export const userSlice = createSlice({
@@ -16,10 +18,16 @@ export const userSlice = createSlice({
     },
     setUserLoading: (state, action)=>{
         state.userLoading = action.payload;
-    }
+    },
+    setEmail: (state, action)=>{
+      state.emailLoading = action.payload;
+    },
+    setImage: (state, action)=>{
+      state.imageLoading = action.payload;
+    },
   },
 })
 
-export const { setUser, setUserLoading } = userSlice.actions
+export const { setUser, setUserLoading, setEmail, setImage } = userSlice.actions
 
 export default userSlice.reducer
