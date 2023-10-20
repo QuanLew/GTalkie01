@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
 import GoBack from '../components/GoBack'
 import { auth } from '../../firebaseConfig'
@@ -16,12 +16,13 @@ const SendEmail = ({ navigation }: any) => {
         setVisible(true);
     };
 
-
     const sender = auth.currentUser.email;
 
     const handleSubmit = async (e) => {
         if (!recipients || !subject || !content) {
-            console.log('Recipients, subject or message is missing.')
+            Alert.alert('Oops', 'Recipients, subject or message is missing.', [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ]);
         }
         showDialog();
         // try {
@@ -42,8 +43,6 @@ const SendEmail = ({ navigation }: any) => {
 
     return (
         <View>
-            <GoBack />
-            
             <View>
                 <View>
                     <Text>To: </Text>

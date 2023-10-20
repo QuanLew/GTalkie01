@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Text, View, TextInput, Button,TouchableOpacity } from 'react-native'
+import { Text, View, TextInput, Button, Alert } from 'react-native'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../../firebaseConfig'
-import { useNavigation } from '@react-navigation/native'
+import GoBack from '../components/GoBack'
 
 const ForgotPassword = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
@@ -11,11 +11,11 @@ const ForgotPassword = ({ navigation }: any) => {
         try{
             await sendPasswordResetEmail(auth, email)
             .then(() => {
-                console.log('You will receive an email with information for creating a new password')
+                Alert.alert('Thank you', 'You will receive an email with information for creating a new password', [
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                  ]);
                 navigation.navigate('Login')
-                console.log("Success")
             })
-
         }catch(e){
             console.log(e)
         }
@@ -24,11 +24,7 @@ const ForgotPassword = ({ navigation }: any) => {
     return (
         <View>
             <View>
-                <View>
-                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                        <Text>Back</Text>
-                    </TouchableOpacity>
-                </View>
+                <GoBack />
                 <Text>Reset Password</Text>
             </View>
             

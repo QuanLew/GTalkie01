@@ -1,29 +1,20 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
-import { signOut } from 'firebase/auth'
-import { auth } from '../../firebaseConfig'
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 const Main = ({ navigation }: any) => {
-  const handleLogout = async ()=>{
-    await signOut(auth);
-  }
-
   return (
     <View>
       <View>
         <Text>How can I help you?</Text>
-        <TouchableOpacity onPress={handleLogout}>
-          <Text>Log out</Text>
-        </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <Text>Profile</Text>
-      </TouchableOpacity>
+      <Image source={require('../../assets/images/robot.png')}/>
 
       <TouchableOpacity onPress={() => navigation.navigate('SendEmail')}>
-        <Text>Send Email</Text>
+        <MaterialIcons name="record-voice-over" size={24} color="black" />
       </TouchableOpacity>
+
     </View>
   )
 }

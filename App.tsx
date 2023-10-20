@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Main from "./app/screens/Main";
@@ -10,12 +11,39 @@ import { store } from "./redux/store";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
 import ForgotPassword from "./app/screens/ForgotPassword";
-import SendEmail from "./app/screens/SendEmail";
 import Profile from "./app/screens/Profile";
+import * as SplashScreen from 'expo-splash-screen';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import CustomSidebarMenu from "./app/components/CustomSidebarMenu";
+import Logout from './app/components/Logout';
+import SendEmail from './app/screens/SendEmail';
 
 const Stack = createNativeStackNavigator();
+SplashScreen.preventAutoHideAsync();
+const Drawer = createDrawerNavigator();
+  
+// allowance
+function AfterLogin() {
+    return (
+        <Stack.Navigator
+        initialRouteName="Main"
+        screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="SendEmail" component={SendEmail} />
+            <Stack.Screen name="Logout" component={Logout} />
+        </Stack.Navigator>
+    );
+}
 
-export default function app() {
+export default function App() {
+    // keep SplashScreen stay for 2.5s
+    useEffect(() => {
+        setTimeout(async () => {
+            await SplashScreen.hideAsync();
+        }, 2500);
+        }, [])
+        
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
 
@@ -29,30 +57,46 @@ export default function app() {
         return subscriber; // unsubscribe on unmount
     }, []);
       
+    // handle routing
+    if (!user) {
     return (
         <GestureHandlerRootView style={styles.root}>
             <NavigationContainer>
-                <Provider store={store}>
-                    { user ?
-                        <Stack.Navigator>
-                            <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
-                            <Stack.Screen options={{headerShown: false}} name='SendEmail' component={SendEmail} />
-                            <Stack.Screen options={{headerShown: false}} name='Profile' component={Profile} />
-
-                        </Stack.Navigator>
-                    : ( 
-                        <Stack.Navigator>
-                            <Stack.Screen options={{headerShown: false}} name="Login" component={Login} />
-                            <Stack.Screen options={{headerShown: false}} name='Signup' component={Signup} />
-                            <Stack.Screen options={{headerShown: false}} name='ForgotPassword' component={ForgotPassword} />
-                        </Stack.Navigator> 
-                        )
-                    }
-                </Provider>
+                <Stack.Navigator>
+                    <Stack.Screen options={{headerShown: false}} name="Login" component={Login} />
+                    <Stack.Screen options={{headerShown: false}} name='Signup' component={Signup} />
+                    <Stack.Screen options={{headerShown: false}} name='ForgotPassword' component={ForgotPassword} />
+                </Stack.Navigator>
             </NavigationContainer>
-
         </GestureHandlerRootView>
-    );
+    )}
+    return (
+        <GestureHandlerRootView style={styles.root}>
+        <Provider store={store}>
+            <NavigationContainer>
+                <Drawer.Navigator drawerContent={props => <CustomSidebarMenu {...props} />}>
+                    {/* hide this */}
+                    <Drawer.Screen
+                        name="AfterLogin"
+                        component={AfterLogin}
+                        options={{
+                            drawerItemStyle: { height: 0 }
+                          }}
+                        />
+                    <Drawer.Screen
+                        name="Home"
+                        component={Main}
+                        />
+                    <Drawer.Screen
+                        name="Profile"
+                        component={Profile}
+                        />
+
+                </Drawer.Navigator>
+            </NavigationContainer>
+        </Provider>
+        </GestureHandlerRootView>
+    )
   }
 
   const styles = StyleSheet.create({

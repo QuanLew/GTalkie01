@@ -4,10 +4,10 @@
     "slug": "GTalkie",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/ios/AppIcon-29.png",
+    "icon": "./assets/icons/ios/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/intro.png",
+      "image": "./assets/images/splashscreen.png",
       "resizeMode": "cover"
     },
     "assetBundlePatterns": [
@@ -17,15 +17,17 @@
       "supportsTablet": true
     },
     "web": {
-      "favicon": "./assets/icons/ios/AppIcon-29.png"
-    }, 
+      "favicon": "./assets/icons/ios/icon.png"
+    },
+    "scheme": "myappdrawersexporouter",
     "plugins": [
-        [
-          "expo-image-picker",
-          {
-            "photosPermission": "The app accesses your photos to let you share them with your friends."
-          }
-        ]
-      ]
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      "expo-router"
+    ]
   }
 }

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConfig'
@@ -16,24 +16,30 @@ const Login = ({ navigation }: any) => {
 
     const handleSubmit = async () => {
         if(email && password){
-            try {
-                setLoading(true)
-                const user = await signInWithEmailAndPassword(auth, email, password);
-                console.log("Login: ", user)
-            } catch(e) {
-                console.log(e)
-            }
+            setLoading(true)
+            const user = await signInWithEmailAndPassword(auth, email, password).catch((error) => {
+                // Handle Errors here.
+                var errorMessage = error.message;
+                if (errorMessage == "Firebase: Error (auth/invalid-email).") {
+                    Alert.alert('Oops', "Invalid email or password. Please try again", [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    ])
+                } else {
+                    Alert.alert('Oops', errorMessage, [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    ])}
+                }
+            )
         } else {
             // show error
             showDialog()
-            console.log("Missing email or password")
         }
     };
 
     return (
         <View>
             <View>
-                <Image source={require('../../assets/images/robot.png')} />
+                <Image source={require('../../assets/icons/ios/icon.png')} />
                 <Text>Welcome to G-Talkie</Text>
                 <Text>Make our life become easier</Text>
             </View>
@@ -56,9 +62,6 @@ const Login = ({ navigation }: any) => {
                             </Dialog.Description>
                         </Dialog.Container>
                     </TouchableOpacity>
-                            
-                    <Text>OR</Text>
-                    <Text>google twitter blah blah</Text>
                 </View>
 
                 <View>
@@ -69,6 +72,7 @@ const Login = ({ navigation }: any) => {
                         </TouchableOpacity>
                     </Text>
                 </View>
+                
             </View>
         </View>
     )

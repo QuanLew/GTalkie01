@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import CheckBox from 'expo-checkbox'
@@ -48,9 +48,9 @@ const Signup = ({ navigation }: any) => {
             xhr.send(null);
         })
 
-        const ref = storage.ref(storage.getStorage(), 'images/')
+        const ref = storage.ref(storage.getStorage(), 'images/' + user.uid)
         
-        const uploadTask = storage.uploadBytes(ref, blob)
+        storage.uploadBytes(ref, blob)
 
         storage.getDownloadURL(ref).then((url =>{
             updateProfile(user, { photoURL: url })
@@ -60,18 +60,28 @@ const Signup = ({ navigation }: any) => {
     const handleSubmit = async ()=>{
         if(email && password && password == reenter_password && toggleCheckBox){
             try {
-                    await createUserWithEmailAndPassword(auth, email, password)
-                    await uploadImage(image)
-                    await signOut(auth)
+                    await createUserWithEmailAndPassword(auth, email, password).then((res)  => {
+                        uploadImage(image)
+                        signOut(auth)
+                    })
+                    Alert.alert('Congratulations', 'Your account has been successfully created. Please login to continue.', [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                      ]);
             } catch(e) {
-                console.log(e)
+                alert(e)
             }
         } else if(email && password && password == reenter_password && !toggleCheckBox) {
-            console.log('Please agree to the Terms and Conditions')
+            Alert.alert('Oops!', 'Please agree to the Terms and Conditions', [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ]);
         } else if(password != reenter_password) {
-            console.log('Please make sure your passwords match')
+            Alert.alert('Oops!', 'Please make sure your passwords match', [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ]);
         } else {
-            console.log('Please enter email and password')
+            Alert.alert('Oops!', 'Please enter email and password', [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ]);
         }
     }
 
