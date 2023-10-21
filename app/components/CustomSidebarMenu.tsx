@@ -5,23 +5,28 @@ import {
   Image,
   Text,
 } from 'react-native';
-
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
 import Logout from './Logout';
+import { getAuth } from 'firebase/auth';
+
 
 const CustomSidebarMenu = (props) => {
+  const auth = getAuth()
+  const user = auth.currentUser
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      {/*Top Large Image */}
-      <Image
-        source={require('../../assets/icons/ios/icon.png')}
-        style={styles.sideMenuProfileIcon}
-      />
-      <DrawerContentScrollView {...props}>
+      <Text>Hello,</Text>
+      { 
+            user.photoURL ? 
+              <Image source={{ uri: user.photoURL }} style={{ width: 110, height: 110 }} /> : 
+              <Image source={require('../../assets/images/anon.png')} style={{ width: 110, height: 110 }} />  
+            }
+      <DrawerContentScrollView {...props} >
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <Logout />

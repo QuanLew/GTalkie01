@@ -17,6 +17,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomSidebarMenu from "./app/components/CustomSidebarMenu";
 import Logout from './app/components/Logout';
 import SendEmail from './app/screens/SendEmail';
+import Contacts from './app/screens/Contacts';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -32,6 +33,7 @@ function AfterLogin() {
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="SendEmail" component={SendEmail} />
             <Stack.Screen name="Logout" component={Logout} />
+            <Stack.Screen name="Contacts" component={Contacts} />
         </Stack.Navigator>
     );
 }
@@ -77,21 +79,26 @@ export default function App() {
                 <Drawer.Navigator drawerContent={props => <CustomSidebarMenu {...props} />}>
                     {/* hide this */}
                     <Drawer.Screen
-                        name="AfterLogin"
+                        name="Welcome"
                         component={AfterLogin}
                         options={{
-                            drawerItemStyle: { height: 0 }
-                          }}
+                            drawerItemStyle: { height: 0 },
+                            headerTitle: "Home"
+                        }}
                         />
                     <Drawer.Screen
                         name="Home"
                         component={Main}
+
                         />
                     <Drawer.Screen
                         name="Profile"
                         component={Profile}
                         />
-
+                    <Drawer.Screen
+                        name="Contacts"
+                        component={Contacts}
+                        />
                 </Drawer.Navigator>
             </NavigationContainer>
         </Provider>
@@ -106,4 +113,4 @@ export default function App() {
         paddingBottom: 5,
         paddingLeft: 10,
     },
-})
+    })

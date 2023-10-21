@@ -68,6 +68,12 @@ const SendEmail = ({ navigation }: any) => {
                     </Dialog.Description>
                 </Dialog.Container>
             </TouchableOpacity>
+
+            {/* TODO: save to draft */}
+            <TouchableOpacity>
+                <Text>Save Draft</Text>
+            </TouchableOpacity>
+
         </View>
     )
 }

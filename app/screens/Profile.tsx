@@ -56,7 +56,6 @@ const Profile = ({ navigation }: any) => {
 
   return (
     <View>
-      <Text>Profile</Text>
         <View>
           <TouchableOpacity onPress={pickImage}>
             {isLoading && <ActivityIndicator size="small" color="#0000ff" />}
@@ -68,7 +67,7 @@ const Profile = ({ navigation }: any) => {
             <AntDesign name="camera" size={20} color="black" />
           </TouchableOpacity>
         </View>
-        <Text>User ID {user.uid}</Text>
+        {/* <Text>User ID {user.uid}</Text> */}
         <Text>Email {user.email}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
           <Text>Reset password</Text>

@@ -1,7 +1,7 @@
 import { initializeApp, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, orderBy, query, onSnapshot, getFirestore } from "firebase/firestore";
+import { collection, addDoc, orderBy, query, onSnapshot, getFirestore, initializeFirestore } from "firebase/firestore";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -40,5 +40,9 @@ const firestore = {
 const auth = getAuth(app);
 
 const database = getFirestore();
+
+// const database = initializeFirestore(app, {
+//   experimentalAutoDetectLongPolling: true
+// })
 
 export { auth, storage, firestore, database };

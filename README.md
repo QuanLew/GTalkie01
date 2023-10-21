@@ -1,5 +1,6 @@
 ### To run frontend
 in root, execute:
+`npm install`
 `npm start`
 then choose `i`
 

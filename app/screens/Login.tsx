@@ -39,7 +39,7 @@ const Login = ({ navigation }: any) => {
     return (
         <View>
             <View>
-                <Image source={require('../../assets/icons/ios/icon.png')} />
+                <Image source={require('../../assets/icons/ios/new_icon.png')} style={{ width: 100, height: 100 }}/>
                 <Text>Welcome to G-Talkie</Text>
                 <Text>Make our life become easier</Text>
             </View>
