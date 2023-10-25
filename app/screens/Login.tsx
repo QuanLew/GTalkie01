@@ -59,7 +59,7 @@ const Login = ({ navigation }: any) => {
           source={require("../../assets/icons/ios/new_icon.png")}
           style={styles.icon}
         />
-        <Text style={styles.paragraph}>Welcome to G-Talkie</Text>
+        <Text style={styles.title}>Welcome to G-Talkie</Text>
         <Text style={styles.paragraph}>Make our life become easier</Text>
       </View>
 
@@ -137,21 +137,24 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   title: {
-    fontSize: 30,
+    fontSize: 20,
     color: theme.colors.textPrimary,
     textAlign: "center",
+    fontFamily:"Fredoka",
+    marginTop: 10,
   },
   paragraph: {
     color: theme.colors.textPrimary,
     marginTop: 10,
     textAlign: "center",
-    
+    fontFamily:"Fredoka"
+
   },
   icon: {
     resizeMode: "contain",
     width: "50%",
     height: "35%",
-    marginTop: 60,
+    marginTop: 70,
     marginLeft: "25%",
   },
   inputContainer: {
