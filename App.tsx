@@ -18,6 +18,7 @@ import CustomSidebarMenu from "./app/components/CustomSidebarMenu";
 import Logout from './app/components/Logout';
 import SendEmail from './app/screens/SendEmail';
 import Contacts from './app/screens/Contacts';
+import { useFonts } from "expo-font";
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -25,6 +26,12 @@ const Drawer = createDrawerNavigator();
   
 // allowance
 function AfterLogin() {
+    const [fontsLoaded, error] = useFonts({
+        "Fredoka": require("./assets/fonts/Fredoka.ttf"),
+    });
+    if (!fontsLoaded && !error) {
+        return null;
+    }
     return (
         <Stack.Navigator
         initialRouteName="Main"
@@ -39,6 +46,7 @@ function AfterLogin() {
 }
 
 export default function App() {
+    
     // keep SplashScreen stay for 2.5s
     useEffect(() => {
         setTimeout(async () => {
@@ -58,7 +66,12 @@ export default function App() {
         const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
     }, []);
-      
+    const [fontsLoaded, error] = useFonts({
+        "Fredoka": require("./assets/fonts/Fredoka.ttf"),
+    });
+    if (!fontsLoaded && !error) {
+        return null;
+    }
     // handle routing
     if (!user) {
     return (
@@ -109,8 +122,5 @@ export default function App() {
   const styles = StyleSheet.create({
     root: {
         flex: 1,
-        paddingTop: 100,
-        paddingBottom: 5,
-        paddingLeft: 10,
     },
     })
