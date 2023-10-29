@@ -2,11 +2,19 @@ import { TextInput, View, StyleSheet } from "react-native";
 
 import theme from "../../theme";
 
-const textInput = ({ value, onChange, placeholder, before, secureTextEntry }) => {
+const textInput = ({
+  value,
+  onChangeText,
+  placeholder,
+  before,
+  secureTextEntry,
+}) => {
   return (
     <View style={styles.container}>
       {before}
       <TextInput
+        value={value}
+        onChangeText={onChangeText}
         autoCapitalize="none"
         clearTextOnFocus
         style={styles.input}
