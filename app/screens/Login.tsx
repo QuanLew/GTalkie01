@@ -26,10 +26,11 @@ const Login = ({ navigation }: any) => {
                     ])
                 } else {
                     Alert.alert('Oops', errorMessage, [
-                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                        {text: 'OK', onPress: () => console.log(errorMessage)},
                     ])}
                 }
             )
+            console.log(user)
         } else {
             // show error
             showDialog()
