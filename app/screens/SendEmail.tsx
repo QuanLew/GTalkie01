@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { auth, database, storage } from '../../firebaseConfig'
+import React, { useState } from 'react'
+import { auth, database } from '../../firebaseConfig'
 import Dialog from "react-native-dialog";
 import { AntDesign } from '@expo/vector-icons'; 
 import getUID from '../components/getUID';
-import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const SendEmail = ({ navigation }: any) => {
     const [recipients, setRecipients] = useState('');
@@ -13,7 +15,6 @@ const SendEmail = ({ navigation }: any) => {
     const [content, setContent] = useState('');
     const [visible, setVisible] = useState(false);
     const [email, setEmail] = useState([]);
-    const [draft, setDraft] = useState([]);
 
     const uid = getUID()
 
@@ -52,29 +53,32 @@ const SendEmail = ({ navigation }: any) => {
     }
 
     const saveDraft = async () => {
-        // const ref = query(collection(database, `users/${uid}/drafts`))
-        //     const querySnapshot = await getDocs(ref);
-        //     setDraft(querySnapshot.docs.map((doc) => ({
-        //         // doc.data() is never undefined for query doc snapshots
-        //         // console.log(doc.id, " => ", doc.data().name);
-        //         id: doc.id,
-        //         data: doc.data().name
-        //     })
-        // ))
-        const draft = { 
-            id: Math.random(),           
-            to: recipients,
-            subject: subject,
-            content: content
-        }
-        
-        await setDoc(doc(database,`users/${uid}/drafts/${draft.id}`), draft)
-            .then(docRef => {
-                console.log("Draft saved.")
+        if (recipients && subject && content) {
+            const draft = { 
+                id: uuidv4(),
+                to: recipients,
+                subject: subject,
+                content: content
+            }
+            await setDoc(doc(database,`users/${uid}/drafts/${draft.id}`), draft)
+                .then(docRef => {
+                    Alert.alert('Nice work!', 'Draft saved.', [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                      ]);
+                    setRecipients("")
+                    setSubject("")
+                    setContent("")
+                })
+            .catch(error => {
+                Alert.alert('Oops', error, [
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                  ]);
             })
-        .catch(error => {
-            console.log("Error" + error);
-        })
+        } else {
+            Alert.alert('Oops', 'Email is incompleted.', [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ]);
+        }
     }
 
     return (
@@ -109,11 +113,9 @@ const SendEmail = ({ navigation }: any) => {
                 </Dialog.Container>
             </TouchableOpacity>
 
-            {/* TODO: save to draft */}
             <TouchableOpacity onPress={saveDraft}>
                 <Text>Save Draft</Text>
             </TouchableOpacity>
-
         </View>
     )
 }
