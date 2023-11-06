@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { auth, database } from '../../firebaseConfig'
 import Dialog from "react-native-dialog";
 import { AntDesign } from '@expo/vector-icons'; 
@@ -17,6 +17,21 @@ const SendEmail = ({ navigation }: any) => {
     const [email, setEmail] = useState([]);
 
     const uid = getUID()
+
+    const [currentDate, setCurrentDate] = useState('');
+
+    useEffect(() => {
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear(); //Current Year
+        var hours = new Date().getHours(); //Current Hours
+        var min = new Date().getMinutes(); //Current Minutes
+        var sec = new Date().getSeconds(); //Current Seconds
+        setCurrentDate(
+        date + '/' + month + '/' + year 
+        + ' ' + hours + ':' + min + ':' + sec
+        );
+    }, []);
 
     const showDialog = () => {
         setVisible(true);
@@ -52,13 +67,15 @@ const SendEmail = ({ navigation }: any) => {
         // }
     }
 
+
     const saveDraft = async () => {
         if (recipients && subject && content) {
             const draft = { 
                 id: uuidv4(),
                 to: recipients,
                 subject: subject,
-                content: content
+                content: content,
+                date: currentDate
             }
             await setDoc(doc(database,`users/${uid}/drafts/${draft.id}`), draft)
                 .then(docRef => {

@@ -18,6 +18,7 @@ import CustomSidebarMenu from "./app/components/CustomSidebarMenu";
 import Logout from './app/components/Logout';
 import SendEmail from './app/screens/SendEmail';
 import ContactList from './app/screens/ContactList';
+import Draft from './app/screens/Draft';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -34,6 +35,7 @@ function AfterLogin() {
             <Stack.Screen name="SendEmail" component={SendEmail} />
             <Stack.Screen name="Logout" component={Logout} />
             <Stack.Screen name="ContactList" component={ContactList} />
+            <Stack.Screen name="Drafts" component={Draft} />
         </Stack.Navigator>
     );
 }
@@ -94,6 +96,10 @@ export default function App() {
                     <Drawer.Screen
                         name="Profile"
                         component={Profile}
+                        />
+                    <Drawer.Screen
+                        name="Drafts"
+                        component={Draft}
                         />
                     <Drawer.Screen
                         name="ContactList"
