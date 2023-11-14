@@ -1,51 +1,47 @@
-import { View, Text, FlatList, Button, SafeAreaView, RefreshControl } from 'react-native'
+import { View, Text, FlatList, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { DocumentData, collection, getDocs, query } from 'firebase/firestore'
+import { collection, query, where } from 'firebase/firestore'
 import { database } from '../../firebaseConfig'
 import getUID from '../components/getUID'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { getDrafts } from '../components/getDraft'
 
-const Draft = () => {
+// Get list of drafts
+const Draft = ({ navigation }: any) => {
     const [drafts, setDrafts] = useState([])
     const [refreshing, setRefreshing] = useState(true);
     const uid = getUID()
 
     useEffect(() => {
-        getDrafts().then(setDrafts);
+        getDrafts(q).then(setDrafts);
+        setRefreshing(false)
       },[])
 
-    async function getDrafts () {
-        const q = query(collection(database, `users/${uid}/drafts/`))
+    const q = query(collection(database, `users/${uid}/drafts/`),where("isDraft", "==", true))
 
-        let myDrafts: DocumentData[] = [];
-        try {
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                myDrafts.push(doc.data())
-            });
-            console.log(myDrafts)
-        } catch (e) {
-            console.error(e);
-        }
-        setRefreshing(false)
-        return myDrafts
-    }
 
     const onRefresh = () => {
         //Clear old data of the list
-        getDrafts().then(setDrafts);
+        getDrafts(q).then(setDrafts);
     };
+
+    const renderItem = (({item}) => {
+        return (
+            <View>
+                <TouchableOpacity onPress={() => navigation.navigate('DisplayDraft', {id: item.id})}>
+                    <Text>To: {item.to}</Text>
+                    <Text>Subject: {item.subject}</Text>
+                    <Text>{item.date}</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    })
     
     return (
         <View>
             <FlatList
             data={drafts}
-            renderItem={({item}) => (
-                <View>
-                    <Text>To: {item.to}</Text>
-                    <Text>Subject: {item.subject}</Text>
-                    <Text>{item.date}</Text>
-                </View>
-            )}
+            renderItem={renderItem}
             keyExtractor={data => data.id}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

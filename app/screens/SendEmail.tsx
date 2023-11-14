@@ -19,6 +19,11 @@ const SendEmail = ({ navigation }: any) => {
     const uid = getUID()
 
     const [currentDate, setCurrentDate] = useState('');
+    const [currentTime, setCurrentTime] = useState('');
+    const [isDraft, setIsDraft] = useState(true); // if sent, then false
+    const [isDeleted, setIsDeleted] = useState(false); // if delete, then true
+    const [isStarred, setIsStarred] = useState(false); // if starred, then true
+
 
     useEffect(() => {
         var date = new Date().getDate(); //Current Date
@@ -29,8 +34,10 @@ const SendEmail = ({ navigation }: any) => {
         var sec = new Date().getSeconds(); //Current Seconds
         setCurrentDate(
         date + '/' + month + '/' + year 
-        + ' ' + hours + ':' + min + ':' + sec
-        );
+        )
+        setCurrentTime(
+        hours + ':' + min + ':' + sec
+        )
     }, []);
 
     const showDialog = () => {
@@ -38,7 +45,6 @@ const SendEmail = ({ navigation }: any) => {
     };
 
     const handleEmail = (email) => {
-        console.log("I got email: " + email)
         setRecipients(email)
     }
 
@@ -47,19 +53,27 @@ const SendEmail = ({ navigation }: any) => {
     const handleSubmit = async (e) => {
         if (!recipients || !subject || !content) {
             Alert.alert('Oops', 'Recipients, subject or message is missing.', [
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
+                {text: 'OK', onPress: () => console.log('Incompleted form')},
               ]);
         }
         showDialog();
         // try {
-        //     setLoading(true);
+        //     setLoading(true)
+        //     setIsDraft(false)
         //     const data = await axios.post("http://localhost:4000/api/email", {
         //         sender,
         //         recipients,
         //         subject,
-        //         content
-        //     });
-        //     setLoading(false);
+        //         content,
+        //         currentDate,
+        //         currentTime,
+        //         isDraft,
+        //         hasSent,
+        //         isDeleted,
+        //         isStarred,
+        //     })
+        //     setLoading(false)
+        //     setIsDraft(true)
         //     <Success />
         // } catch (e) {
         //     console.log(e.response.data.message);
@@ -75,12 +89,16 @@ const SendEmail = ({ navigation }: any) => {
                 to: recipients,
                 subject: subject,
                 content: content,
-                date: currentDate
+                date: currentDate,
+                time: currentTime,
+                isDraft,
+                isDeleted,
+                isStarred
             }
             await setDoc(doc(database,`users/${uid}/drafts/${draft.id}`), draft)
                 .then(docRef => {
                     Alert.alert('Nice work!', 'Draft saved.', [
-                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                        {text: 'OK', onPress: () => console.log('SAVED.')},
                       ]);
                     setRecipients("")
                     setSubject("")
@@ -88,12 +106,12 @@ const SendEmail = ({ navigation }: any) => {
                 })
             .catch(error => {
                 Alert.alert('Oops', error, [
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    {text: 'OK', onPress: () => console.log('ERROR: ', error)},
                   ]);
             })
         } else {
             Alert.alert('Oops', 'Email is incompleted.', [
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
+                {text: 'OK', onPress: () => console.log('Incompleted form')},
               ]);
         }
     }

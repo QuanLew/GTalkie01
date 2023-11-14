@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, View, Text, Button, Alert } from "react-native";
 import * as ExpoContacts from 'expo-contacts';
+import { useNavigation } from "@react-navigation/native";
 
-const ContactList = ({ navigation, route }) => {
+const ContactList = ({ route }) => {
+  const navigation = useNavigation()
+  
   const [contactList, setContactList] = useState([]);
 
   // on Mount we should ask for permissions
@@ -28,7 +31,7 @@ const ContactList = ({ navigation, route }) => {
     }
     catch (e) {
       Alert.alert('Oops', 'This person doesn\'t have an email', [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {text: 'OK', onPress: () => console.log('Contact has no email')},
       ]);
     }
     //console.log(email)
