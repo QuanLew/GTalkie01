@@ -85,15 +85,15 @@ const Signup = ({ navigation }: any) => {
       !toggleCheckBox
     ) {
       Alert.alert("Oops!", "Please agree to the Terms and Conditions", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
+        {text: 'OK', onPress: () => console.log('Check missing')},
       ]);
     } else if (password != reenter_password) {
       Alert.alert("Oops!", "Please make sure your passwords match", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
+        {text: 'OK', onPress: () => console.log('Password doesnt match')},
       ]);
     } else {
       Alert.alert("Oops!", "Please enter email and password", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
+        {text: 'OK', onPress: () => console.log('Missing field')},
       ]);
     }
   };
