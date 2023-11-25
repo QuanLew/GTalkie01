@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 const ContactList = ({ route }) => {
   const navigation = useNavigation();
 
+
   const [contactList, setContactList] = useState([]);
 
   // on Mount we should ask for permissions
@@ -14,6 +15,7 @@ const ContactList = ({ route }) => {
       const permissions = await ExpoContacts.requestPermissionsAsync();
 
       if (permissions.status === "granted") {
+
         const { data } = await ExpoContacts.getContactsAsync();
         setContactList(data);
       }
@@ -51,3 +53,4 @@ const ContactList = ({ route }) => {
 };
 
 export default ContactList;
+

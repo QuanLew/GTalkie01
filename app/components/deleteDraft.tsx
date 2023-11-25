@@ -8,4 +8,5 @@ export default async function deleteDraft(draft) {
     const uid = getUID()
 
     await deleteDoc(doc(database, `users/${uid}/drafts/` + draft));
+
 }

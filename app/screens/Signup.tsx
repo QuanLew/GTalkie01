@@ -39,62 +39,55 @@ const Signup = ({ navigation }: any) => {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    const blob: any = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", uri, true);
-      xhr.send(null);
-    });
+        const blob: any = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function() {
+                reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+        })
 
-    const ref = storage.ref(storage.getStorage(), "images/" + user.uid);
+        const ref = storage.ref(storage.getStorage(), 'images/' + user.uid)
+        
+        storage.uploadBytes(ref, blob)
 
-    storage.uploadBytes(ref, blob);
-
-    storage.getDownloadURL(ref).then((url) => {
-      updateProfile(user, { photoURL: url });
-    });
-  };
-
-  const handleSubmit = async () => {
-    if (email && password && password == reenter_password && toggleCheckBox) {
-      try {
-        await createUserWithEmailAndPassword(auth, email, password).then(
-          (res) => {
-            uploadImage(image);
-            signOut(auth);
-          }
-        );
-        Alert.alert(
-          "Congratulations",
-          "Your account has been successfully created. Please login to continue.",
-          [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-        );
-      } catch (e) {
-        alert(e);
+        storage.getDownloadURL(ref).then((url =>{
+            updateProfile(user, { photoURL: url })
+          }))
       }
-    } else if (
-      email &&
-      password &&
-      password == reenter_password &&
-      !toggleCheckBox
-    ) {
-      Alert.alert("Oops!", "Please agree to the Terms and Conditions", [
-        {text: 'OK', onPress: () => console.log('Check missing')},
-      ]);
-    } else if (password != reenter_password) {
-      Alert.alert("Oops!", "Please make sure your passwords match", [
-        {text: 'OK', onPress: () => console.log('Password doesnt match')},
-      ]);
-    } else {
-      Alert.alert("Oops!", "Please enter email and password", [
-        {text: 'OK', onPress: () => console.log('Missing field')},
-      ]);
+
+
+    const handleSubmit = async ()=>{
+        if(email && password && password == reenter_password && toggleCheckBox){
+            try {
+                    await createUserWithEmailAndPassword(auth, email, password).then((res)  => {
+                        uploadImage(image)
+                        signOut(auth)
+                    })
+                    Alert.alert('Congratulations', 'Your account has been successfully created. Please login to continue.', [
+                        {text: 'OK', onPress: () => console.log('Sign up successfully')},
+                      ]);
+            } catch(e) {
+                alert(e)
+            }
+        } else if(email && password && password == reenter_password && !toggleCheckBox) {
+            Alert.alert('Oops!', 'Please agree to the Terms and Conditions', [
+                {text: 'OK', onPress: () => console.log('Check missing')},
+              ]);
+        } else if(password != reenter_password) {
+            Alert.alert('Oops!', 'Please make sure your passwords match', [
+                {text: 'OK', onPress: () => console.log('Password doesnt match')},
+              ]);
+        } else {
+            Alert.alert('Oops!', 'Please enter email and password', [
+                {text: 'OK', onPress: () => console.log('Missing field')},
+              ]);
+        }
     }
   };
 

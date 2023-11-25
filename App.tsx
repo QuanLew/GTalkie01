@@ -24,6 +24,7 @@ import Draft from "./app/screens/Draft";
 import DisplayDraft from "./app/screens/DisplayDraft";
 import theme from "./theme";
 
+
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
 const Drawer = createDrawerNavigator();
@@ -50,6 +51,7 @@ function AfterLogin() {
       <Stack.Screen name="DisplayDraft" component={DisplayDraft} />
     </Stack.Navigator>
   );
+
 }
 
 export default function App() {
