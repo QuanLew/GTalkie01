@@ -61,6 +61,7 @@ const Signup = ({ navigation }: any) => {
           }))
       }
 
+
     const handleSubmit = async ()=>{
         if(email && password && password == reenter_password && toggleCheckBox){
             try {

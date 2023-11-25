@@ -1,5 +1,5 @@
 import { Alert } from 'react-native'
-import { getDocs } from 'firebase/firestore';
+import { DocumentData, getDocs } from 'firebase/firestore';
 
 export default async function getDraft(q) {
     let myDraft = null
@@ -35,4 +35,5 @@ export async function getDrafts (q) {
           ])
     }
     return myDrafts
+
 }
