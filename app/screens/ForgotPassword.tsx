@@ -12,7 +12,7 @@ const ForgotPassword = ({ navigation }: any) => {
             await sendPasswordResetEmail(auth, email)
             .then(() => {
                 Alert.alert('Thank you', 'You will receive an email with information for creating a new password', [
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    {text: 'OK', onPress: () => console.log('Ack')},
                   ]);
                 navigation.navigate('Login')
             })

@@ -2,8 +2,8 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-const GoBack = ({ navigation }: any) => {
-    navigation = useNavigation()
+export default function GoBack () {
+    const navigation = useNavigation()
 
     return (
         <View>
@@ -13,5 +13,3 @@ const GoBack = ({ navigation }: any) => {
         </View>
     )
 }
-
-export default GoBack;

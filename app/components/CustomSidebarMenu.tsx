@@ -8,7 +8,6 @@ import {
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
 } from '@react-navigation/drawer';
 import Logout from './Logout';
 import { getAuth } from 'firebase/auth';
