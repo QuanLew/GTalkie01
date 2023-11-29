@@ -5,7 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { storage } from '../../firebaseConfig';
 import { getAuth, updateProfile } from 'firebase/auth';
 
-
 const Profile = ({ navigation }: any) => {
   const [isLoading, setLoading] = useState(false);
   const auth = getAuth()
