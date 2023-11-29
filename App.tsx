@@ -21,6 +21,7 @@ import ContactList from './app/screens/ContactList';
 import Draft from './app/screens/Draft';
 import DisplayDraft from './app/screens/DisplayDraft';
 import { useFonts } from "expo-font";
+import Trash from './app/screens/Trash';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -45,6 +46,7 @@ function AfterLogin() {
             <Stack.Screen name="ContactList" component={ContactList} />
             <Stack.Screen name="Drafts" component={Draft} />
             <Stack.Screen name="DisplayDraft" component={DisplayDraft} />
+            <Stack.Screen name="Trash" component={Trash} />
         </Stack.Navigator>
     );
 }
@@ -120,6 +122,13 @@ export default function App() {
                         component={Draft}
                         options={{
                             headerTitle: "Drafts"
+                        }}
+                        />
+                    <Drawer.Screen
+                        name="Trash"
+                        component={Trash}
+                        options={{
+                            headerTitle: "Trash"
                         }}
                         />
                     <Drawer.Screen
