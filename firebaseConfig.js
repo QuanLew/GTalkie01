@@ -10,13 +10,12 @@ import { collection, addDoc, orderBy, query, onSnapshot, getFirestore, initializ
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDr9VTEiXkB8l5RFobylIB5wqg9pWxSHW4",
-  authDomain: "gtalkie-6c79a.firebaseapp.com",
-  projectId: "gtalkie-6c79a",
-  storageBucket: "gtalkie-6c79a.appspot.com",
-  messagingSenderId: "979240525228",
-  appId: "1:979240525228:web:68942e41dd29cc49f72e09",
-  measurementId: "G-VL3SXGET42"
+  apiKey: "AIzaSyBBqABW_Gu37FChUsVNh8-4Aof5ohAaLYc",
+  authDomain: "g-talkie.firebaseapp.com",
+  projectId: "g-talkie",
+  storageBucket: "g-talkie.appspot.com",
+  messagingSenderId: "226391179834",
+  appId: "1:226391179834:web:e2f0cd313cf6acce432b03"
 };
 
 // Initialize Firebase
