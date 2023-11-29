@@ -20,7 +20,6 @@ import SendEmail from './app/screens/SendEmail';
 import ContactList from './app/screens/ContactList';
 import Draft from './app/screens/Draft';
 import DisplayDraft from './app/screens/DisplayDraft';
-import Trash from './app/screens/Trash';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -28,6 +27,12 @@ const Drawer = createDrawerNavigator();
   
 // allowance
 function AfterLogin() {
+    const [fontsLoaded, error] = useFonts({
+        "Fredoka": require("./assets/fonts/Fredoka.ttf"),
+    });
+    if (!fontsLoaded && !error) {
+        return null;
+    }
     return (
         <Stack.Navigator
         initialRouteName="Main"
@@ -45,6 +50,7 @@ function AfterLogin() {
 }
 
 export default function App() {
+    
     // keep SplashScreen stay for 2.5s
     useEffect(() => {
         setTimeout(async () => {
@@ -64,7 +70,12 @@ export default function App() {
         const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
     }, []);
-      
+    const [fontsLoaded, error] = useFonts({
+        "Fredoka": require("./assets/fonts/Fredoka.ttf"),
+    });
+    if (!fontsLoaded && !error) {
+        return null;
+    }
     // handle routing
     if (!user) {
     return (
@@ -136,8 +147,5 @@ export default function App() {
   const styles = StyleSheet.create({
     root: {
         flex: 1,
-        paddingTop: 100,
-        paddingBottom: 5,
-        paddingLeft: 10,
     },
     })
