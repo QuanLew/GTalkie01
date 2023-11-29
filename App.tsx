@@ -7,7 +7,7 @@ import Main from "./app/screens/Main";
 import Signup from "./app/screens/Signup";
 import Login from "./app/screens/Login";
 import { auth } from "./firebaseConfig";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -23,7 +23,7 @@ import ContactList from "./app/screens/ContactList";
 import Draft from "./app/screens/Draft";
 import DisplayDraft from "./app/screens/DisplayDraft";
 import theme from "./theme";
-
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -31,12 +31,6 @@ const Drawer = createDrawerNavigator();
 
 // allowance
 function AfterLogin() {
-  const [fontsLoaded, error] = useFonts({
-    Fredoka: require("./assets/fonts/Fredoka.ttf"),
-  });
-  if (!fontsLoaded && !error) {
-    return null;
-  }
   return (
     <Stack.Navigator
       initialRouteName="Main"
@@ -51,7 +45,6 @@ function AfterLogin() {
       <Stack.Screen name="DisplayDraft" component={DisplayDraft} />
     </Stack.Navigator>
   );
-
 }
 
 export default function App() {
@@ -125,6 +118,7 @@ export default function App() {
                 drawerItemStyle: { height: 0 },
                 headerTitle: "Home",
                 headerStyle: customHeaderStyle,
+                headerTitleStyle: styles.title,
               }}
             />
             <Drawer.Screen
@@ -132,6 +126,7 @@ export default function App() {
               component={Main}
               options={{
                 headerStyle: customHeaderStyle,
+                headerTitleStyle: styles.title,
               }}
             />
             <Drawer.Screen
@@ -140,14 +135,17 @@ export default function App() {
               options={{
                 headerTitle: "Profile",
                 headerStyle: customHeaderStyle,
+                headerTitleStyle: styles.title,
               }}
             />
+
             <Drawer.Screen
               name="Drafts"
               component={Draft}
               options={{
                 headerTitle: "Drafts",
                 headerStyle: customHeaderStyle,
+                headerTitleStyle: styles.title,
               }}
             />
             <Drawer.Screen
@@ -156,6 +154,7 @@ export default function App() {
               options={{
                 headerTitle: "Contact",
                 headerStyle: customHeaderStyle,
+                headerTitleStyle: styles.title,
               }}
             />
           </Drawer.Navigator>
@@ -169,7 +168,15 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     height: "100%",
-    backgroundColor: theme.colors.background,
+  },
+  title: {
+    fontSize: 20,
+    color: theme.colors.textPrimary,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  headerTitleContainer: {
+    color: theme.colors.textPrimary,
   },
 });
 
