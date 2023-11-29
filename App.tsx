@@ -21,6 +21,7 @@ import ContactList from './app/screens/ContactList';
 import Draft from './app/screens/Draft';
 import DisplayDraft from './app/screens/DisplayDraft';
 import { useFonts } from "expo-font";
+import Trash from './app/screens/Trash';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
