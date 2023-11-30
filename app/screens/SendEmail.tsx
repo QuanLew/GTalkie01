@@ -15,6 +15,7 @@ const SendEmail = ({ navigation }: any) => {
     const [content, setContent] = useState('');
     const [visible, setVisible] = useState(false);
     const [email, setEmail] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const uid = getUID()
 
@@ -50,13 +51,13 @@ const SendEmail = ({ navigation }: any) => {
 
     const sender = auth.currentUser.email;
 
+    // TODO: separate these twos into components
     const handleSubmit = async (e) => {
         if (!recipients || !subject || !content) {
             Alert.alert('Oops', 'Recipients, subject or message is missing.', [
                 {text: 'OK', onPress: () => console.log('Incompleted form')},
               ]);
         }
-        showDialog();
         // try {
         //     setLoading(true)
         //     setIsDraft(false)
@@ -68,19 +69,19 @@ const SendEmail = ({ navigation }: any) => {
         //         currentDate,
         //         currentTime,
         //         isDraft,
-        //         hasSent,
         //         isDeleted,
         //         isStarred,
         //     })
         //     setLoading(false)
         //     setIsDraft(true)
-        //     <Success />
+        // Alert.alert('All set!', 'Your email was sent', [
+        //     {text: 'OK', onPress: () => console.log('SENT')},
+        //   ]);
         // } catch (e) {
         //     console.log(e.response.data.message);
         //     setLoading(false);
         // }
     }
-
 
     const saveDraft = async () => {
         if (recipients && subject && content) {
@@ -135,17 +136,10 @@ const SendEmail = ({ navigation }: any) => {
                     <Text>Message: </Text>
                     <TextInput autoCapitalize='sentences' clearTextOnFocus value={content} placeholder='Message' onChangeText={value=> setContent(value)} keyboardAppearance='default' multiline />
                 </View>
-
             </View>
 
             <TouchableOpacity onPress={handleSubmit}>
                 <Text>Send</Text>
-                <Dialog.Container visible={visible} onBackdropPress={() => setVisible(false)}>
-                    <Dialog.Title>Oops</Dialog.Title>
-                    <Dialog.Description>
-                        Email address and password is required.
-                    </Dialog.Description>
-                </Dialog.Container>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={saveDraft}>

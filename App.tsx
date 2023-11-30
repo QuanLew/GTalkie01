@@ -17,11 +17,11 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomSidebarMenu from "./app/components/CustomSidebarMenu";
 import Logout from './app/components/Logout';
 import SendEmail from './app/screens/SendEmail';
-import ContactList from './app/screens/ContactList';
 import Draft from './app/screens/Draft';
 import DisplayDraft from './app/screens/DisplayDraft';
 import { useFonts } from "expo-font";
 import Trash from './app/screens/Trash';
+import ContactList from './app/screens/ContactList';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -41,9 +41,9 @@ function AfterLogin() {
         screenOptions={{headerShown: false}}>
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="ContactList" component={ContactList} />
             <Stack.Screen name="SendEmail" component={SendEmail} />
             <Stack.Screen name="Logout" component={Logout} />
-            <Stack.Screen name="ContactList" component={ContactList} />
             <Stack.Screen name="Drafts" component={Draft} />
             <Stack.Screen name="DisplayDraft" component={DisplayDraft} />
             <Stack.Screen name="Trash" component={Trash} />
@@ -108,7 +108,6 @@ export default function App() {
                     <Drawer.Screen
                         name="Home"
                         component={Main}
-
                         />
                     <Drawer.Screen
                         name="Profile"
@@ -129,14 +128,6 @@ export default function App() {
                         component={Trash}
                         options={{
                             headerTitle: "Trash"
-                        }}
-                        />
-                    <Drawer.Screen
-                        name="ContactList"
-                        component={ContactList}
-                        options={{
-                            drawerItemStyle: { height: 0 },
-                            headerTitle: "Contact"
                         }}
                         />
                 </Drawer.Navigator>

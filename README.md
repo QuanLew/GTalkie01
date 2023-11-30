@@ -1,7 +1,7 @@
 ### To run frontend + voiceRegconize
 in root, execute:
 `npm install`
-`npx expo rebuild -p ios`
+`npx expo prebuild -p ios`
 `npm run ios`
 
 ### To run frontend

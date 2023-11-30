@@ -9,10 +9,12 @@ import { getDrafts } from '../components/getDraft'
 // Get list of drafts
 const Draft = ({ navigation }: any) => {
     const [drafts, setDrafts] = useState([])
-    const [refreshing, setRefreshing] = useState(true);
+    const [refreshing, setRefreshing] = useState(false)
+    const [loading, setLoading] = useState(false)
     const uid = getUID()
 
     useEffect(() => {
+        setLoading(true)
         getDrafts(q).then(setDrafts);
         setRefreshing(false)
       },[])
@@ -26,6 +28,8 @@ const Draft = ({ navigation }: any) => {
     };
 
     const renderItem = (({item}) => {
+        setRefreshing(true)
+
         return (
             <View>
                 <TouchableOpacity onPress={() => navigation.navigate('DisplayDraft', {id: item.id})}>

@@ -51,6 +51,8 @@
     </dict>
     <key>NSCameraUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your camera</string>
+    <key>NSContactsUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your contacts.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>CUSTOM: Allow $(PRODUCT_NAME) to access the microphone</string>
     <key>NSPhotoLibraryUsageDescription</key>
@@ -59,7 +61,6 @@
     <string>CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech</string>
     <key>NSUserActivityTypes</key>
     <array>
-      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
     <key>UILaunchStoryboardName</key>
