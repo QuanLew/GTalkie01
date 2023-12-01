@@ -22,6 +22,7 @@ import DisplayDraft from './app/screens/DisplayDraft';
 import { useFonts } from "expo-font";
 import Trash from './app/screens/Trash';
 import ContactList from './app/screens/ContactList';
+import theme from './theme';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -102,32 +103,44 @@ export default function App() {
                         component={AfterLogin}
                         options={{
                             drawerItemStyle: { height: 0 },
-                            headerTitle: "Home"
+                            headerTitle: "Home",
+                            headerStyle: styles.customHeaderStyle,
+                            headerTitleStyle: styles.title
                         }}
                         />
                     <Drawer.Screen
                         name="Home"
                         component={Main}
+                        options={{
+                            headerStyle: styles.customHeaderStyle,
+                            headerTitleStyle: styles.title
+                        }}
                         />
                     <Drawer.Screen
                         name="Profile"
                         component={Profile}
                         options={{
-                            headerTitle: "Profile"
+                            headerTitle: "Profile",
+                            headerStyle: styles.customHeaderStyle,
+                            headerTitleStyle: styles.title
                         }}
                         />
                     <Drawer.Screen
                         name="Drafts"
                         component={Draft}
                         options={{
-                            headerTitle: "Drafts"
+                            headerTitle: "Drafts",
+                            headerStyle: styles.customHeaderStyle,
+                            headerTitleStyle: styles.title
                         }}
                         />
                     <Drawer.Screen
                         name="Trash"
                         component={Trash}
                         options={{
-                            headerTitle: "Trash"
+                            headerTitle: "Trash",
+                            headerStyle: styles.customHeaderStyle,
+                            headerTitleStyle: styles.title
                         }}
                         />
                 </Drawer.Navigator>
@@ -139,6 +152,18 @@ export default function App() {
 
   const styles = StyleSheet.create({
     root: {
-        flex: 1,
+      flex: 1,
+      height: "100%",
     },
-    })
+    title: {
+      fontSize: 20,
+      color: theme.colors.textPrimary,
+      textAlign: "center",
+      fontWeight: "bold",
+    },
+    headerTitleContainer: {
+      color: theme.colors.textPrimary,
+    },
+    customHeaderStyle: {
+        backgroundColor: theme.colors.background,
+  }});

@@ -165,6 +165,8 @@ const Signup = ({ navigation }: any) => {
                 />
               }
               secureTextEntry={false}
+              editable={true}
+
             />
             <TextInput
               value={password}
@@ -178,6 +180,8 @@ const Signup = ({ navigation }: any) => {
                 />
               }
               secureTextEntry={true}
+              editable={true}
+
             />
             <TextInput
               value={reenter_password}
@@ -191,6 +195,8 @@ const Signup = ({ navigation }: any) => {
                 />
               }
               secureTextEntry={true}
+              editable={true}
+
             />
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <CheckBox
@@ -229,7 +235,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: theme.colors.background,
   },
-  title: {
+  title: { 
     fontSize: 20,
     color: theme.colors.textPrimary,
     textAlign: "center",
@@ -252,6 +258,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     rowGap: 20,
     marginTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   signIn: {
     textDecorationLine: "underline",

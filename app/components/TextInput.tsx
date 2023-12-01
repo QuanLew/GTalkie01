@@ -1,6 +1,7 @@
 import { TextInput, View, StyleSheet } from "react-native";
 
 import theme from "../../theme";
+import React from "react";
 
 const textInput = ({
   value,
@@ -8,6 +9,7 @@ const textInput = ({
   placeholder,
   before,
   secureTextEntry,
+  editable
 }) => {
   return (
     <View style={styles.container}>
@@ -21,6 +23,7 @@ const textInput = ({
         placeholder={placeholder}
         placeholderTextColor={theme.colors.textPrimary}
         secureTextEntry={secureTextEntry}
+        editable={editable}
       />
     </View>
   );

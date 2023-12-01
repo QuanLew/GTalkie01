@@ -38,7 +38,7 @@ const Login = ({ navigation }: any) => {
         var errorMessage = error.message;
         if (errorMessage == "Firebase: Error (auth/invalid-email).") {
           Alert.alert("Oops", "Invalid email or password. Please try again", [
-            { text: "OK", onPress: () => console.log("OK Pressed") },
+            { text: "OK", onPress: () => console.log('Try again') },
           ]);
         } else {
           Alert.alert("Oops", errorMessage, [
@@ -76,6 +76,8 @@ const Login = ({ navigation }: any) => {
             />
           }
           secureTextEntry={false}
+          editable={true}
+
         />
         <TextInput
           value={password}
@@ -89,6 +91,8 @@ const Login = ({ navigation }: any) => {
             />
           }
           secureTextEntry={true}
+          editable={true}
+
         />
 
         <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>

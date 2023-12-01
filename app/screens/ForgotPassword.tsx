@@ -49,6 +49,7 @@ const ForgotPassword = ({ navigation }: any) => {
             />
           }
           secureTextEntry={true}
+          editable={true}
         />
       </View>
       <TouchableOpacity
