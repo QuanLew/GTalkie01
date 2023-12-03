@@ -35,5 +35,8 @@ yarn-error.*
 *.tsbuildinfo
 
 #secret
-firebaseConfig.js
+./firebaseConfig.js
 */.env
+
+#ios
+ios/
