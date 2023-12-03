@@ -24,6 +24,7 @@ import Trash from './app/screens/Trash';
 import ContactList from './app/screens/ContactList';
 import theme from './theme';
 import DisplayOneTrash from './app/screens/DisplayOneTrash';
+import History from './app/screens/History';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -50,6 +51,7 @@ function AfterLogin() {
             <Stack.Screen name="DisplayDraft" component={DisplayDraft} />
             <Stack.Screen name="Trash" component={Trash} />
             <Stack.Screen name="DisplayOneTrash" component={DisplayOneTrash} />
+            <Stack.Screen name="History" component={History} />
         </Stack.Navigator>
     );
 }
@@ -123,6 +125,15 @@ export default function App() {
                         component={Profile}
                         options={{
                             headerTitle: "Profile",
+                            headerStyle: styles.customHeaderStyle,
+                            headerTitleStyle: styles.title
+                        }}
+                        />
+                    <Drawer.Screen
+                        name="History"
+                        component={History}
+                        options={{
+                            headerTitle: "History",
                             headerStyle: styles.customHeaderStyle,
                             headerTitleStyle: styles.title
                         }}

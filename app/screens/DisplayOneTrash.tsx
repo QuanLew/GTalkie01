@@ -48,7 +48,7 @@ const DisplayOneTrash = (item) => {
             Alert.alert('Succeed!', 'Your trash is deleted', [
                 {text: 'OK', onPress: () => console.log('DELETE SUCCEED')},
             ])
-            navigation.navigate('Trash')
+            navigation.goBack()
         } catch (e) {
             Alert.alert('Oops!', e, [
                 {text: 'OK', onPress: () => console.log('DELETE FAILED')},

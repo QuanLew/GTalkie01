@@ -41,6 +41,7 @@ const DisplayDraft = (item) => {
             Alert.alert('Whoosh!', 'Send successfully.', [
                 {text: 'OK', onPress: () => console.log('SENT.')},
               ]);
+            navigation.goBack()
         } catch (e) {
             console.log(e.response.data.message);
             setLoading(false);

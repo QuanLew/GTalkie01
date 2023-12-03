@@ -58,24 +58,37 @@ const SendEmail = ({ navigation }: any) => {
                 {text: 'OK', onPress: () => console.log('Incompleted form')},
               ]);
         }
-        // try {
-        //     setLoading(true)
-        //     setIsDraft(false)
-        //     const data = await axios.post("http://localhost:4000/api/email", {
-        //         sender,
-        //         recipients,
-        //         subject,
-        //         content
-        //     })
-        //     setLoading(false)
-        //     setIsDraft(true)
-        // Alert.alert('All set!', 'Your email was sent', [
-        //     {text: 'OK', onPress: () => console.log('SENT')},
-        //   ]);
-        // } catch (e) {
-        //     console.log(e.response.data.message);
-        //     setLoading(false);
-        // }
+        try {
+            setLoading(true)
+            setIsDraft(false)
+            const data = await axios.post("http://localhost:4000/api/email", {
+                sender,
+                recipients,
+                subject,
+                content
+            })
+            setLoading(false)
+            setIsDraft(true)
+            const draft = { 
+                id: uuidv4(),
+                to: recipients,
+                subject: subject,
+                content: content,
+                date: currentDate,
+                time: currentTime,
+                isDraft: false,
+                isDeleted: false,
+                isStarred: false
+            }
+            await setDoc(doc(database,`users/${uid}/drafts/${draft.id}`), draft)
+            Alert.alert('All set!', 'Your email was sent', [
+                {text: 'OK', onPress: () => console.log('SENT')},
+            ]);
+            navigation.goBack()
+        } catch (e) {
+            console.log(e.response.data.message);
+            setLoading(false);
+        }
     }
 
     const saveDraft = async () => {
