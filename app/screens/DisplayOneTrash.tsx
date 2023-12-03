@@ -1,23 +1,21 @@
 import { View, Text, Alert } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { auth, database } from '../../firebaseConfig'
 import getUID from '../components/getUID'
 import getDraft from '../components/getDraft'
-import { markDeleteDraft } from '../components/deleteDraft'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import axios from 'axios';
+import deleteDraft, { recoverDraft } from '../components/deleteDraft'
 
 //Get a single draft
-const DisplayDraft = (item) => {
+const DisplayOneTrash = (item) => {
     const [draft, setDraft] = useState([])
-    const [loading, setLoading] = useState(false);
     const isFocused = useIsFocused();
 
     const id = item.route.params.id
     const uid = getUID()
-    const navigation = useNavigation()
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
     useEffect(() => {
         isFocused
@@ -28,43 +26,39 @@ const DisplayDraft = (item) => {
     
     const sender = auth.currentUser.email;
 
-    async function handleSubmit () {
+    async function recoverTrash () {
         try {
-            setLoading(true);
-            const data = await axios.post("http://localhost:4000/api/email", {
-                sender,
-                recipients: draft.to,
-                subject: draft.subject,
-                content: draft.content,
-            });
-            setLoading(false);
-            Alert.alert('Whoosh!', 'Send successfully.', [
-                {text: 'OK', onPress: () => console.log('SENT.')},
-              ]);
+            const draftID = draft.id
+            recoverDraft(draftID)
+            Alert.alert('Succeed!', 'Your trash is recovered', [
+                {text: 'OK', onPress: () => console.log('RECOVER SUCCEED')},
+            ])
+            navigation.navigate('Trash')
         } catch (e) {
-            console.log(e.response.data.message);
-            setLoading(false);
+            Alert.alert('Oops!', e, [
+                {text: 'OK', onPress: () => console.log('RECOVER FAILED')},
+            ])
         }
     }
 
-    async function markDelete () {
+    async function deleteTrash () {
         try {
             const draftID = draft.id
-            markDeleteDraft(draftID)
-            Alert.alert('Succeed!', 'Your draft is deleted', [
-                {text: 'OK', onPress: () => console.log('MARK DELETE SUCCEED')},
+            deleteDraft(draftID)
+            Alert.alert('Succeed!', 'Your trash is deleted', [
+                {text: 'OK', onPress: () => console.log('DELETE SUCCEED')},
             ])
-            navigation.goBack()
+            navigation.navigate('Trash')
         } catch (e) {
             Alert.alert('Oops!', e, [
-                {text: 'OK', onPress: () => console.log('MARK DELETE FAILED')},
+                {text: 'OK', onPress: () => console.log('DELETE FAILED')},
             ])
         }
     }
 
     return (
         <View>
-            <Text>Display Draft</Text>
+            <Text>Trash can</Text>
             <View>
                 <Text>{draft.to}</Text>
                 <Text>{draft.subject}</Text>
@@ -72,13 +66,13 @@ const DisplayDraft = (item) => {
                 <Text>{draft.content}</Text>
             </View>
             <View>
-                <TouchableOpacity onPress={handleSubmit}>
-                    <Text>Send</Text>
+                <TouchableOpacity onPress={recoverTrash}>
+                    <Text>Restore</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={markDelete}>
+                <TouchableOpacity onPress={deleteTrash}>
                     <Text>Delete</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Drafts')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Trash')}>
                     <Text>Back</Text>
                 </TouchableOpacity>
             </View>
@@ -86,4 +80,4 @@ const DisplayDraft = (item) => {
     )
 }
 
-export default DisplayDraft
+export default DisplayOneTrash

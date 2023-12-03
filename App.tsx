@@ -23,6 +23,7 @@ import { useFonts } from "expo-font";
 import Trash from './app/screens/Trash';
 import ContactList from './app/screens/ContactList';
 import theme from './theme';
+import DisplayOneTrash from './app/screens/DisplayOneTrash';
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -48,6 +49,7 @@ function AfterLogin() {
             <Stack.Screen name="Drafts" component={Draft} />
             <Stack.Screen name="DisplayDraft" component={DisplayDraft} />
             <Stack.Screen name="Trash" component={Trash} />
+            <Stack.Screen name="DisplayOneTrash" component={DisplayOneTrash} />
         </Stack.Navigator>
     );
 }

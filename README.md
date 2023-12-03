@@ -13,5 +13,6 @@ then choose `i`
 ### To run backend
 navigate to backend
 execute
+`npm install nodemon`
 `npm run dev`
 

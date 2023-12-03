@@ -5,50 +5,36 @@ import { database } from '../../firebaseConfig'
 import getUID from '../components/getUID'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { getDrafts } from '../components/getDraft'
-import deleteDraft from '../components/deleteDraft'
+import { useIsFocused } from '@react-navigation/native'
 
 // Get list of drafts
 const Trash = ({ navigation }: any) => {
     const [trash, setTrash] = useState([])
     const [refreshing, setRefreshing] = useState(true);
+    const isFocused = useIsFocused()
+    
     const uid = getUID()
 
     useEffect(() => {
+        isFocused
         getDrafts(q).then(setTrash);
         setRefreshing(false)
-      },[])
+      },[isFocused])
 
     const q = query(collection(database, `users/${uid}/drafts/`),where("isDraft", "==", true), where("isDeleted", "==", true))
 
     const onRefresh = () => {
-        //Clear old data of the list
         getDrafts(q).then(setTrash);
     };
-
-    async function handleDelete(draftID) {
-        try {
-            deleteDraft(draftID)
-            Alert.alert('Succeed!', 'Your draft is deleted', [
-                {text: 'OK', onPress: () => console.log('DELETE SUCCEED')},
-            ])
-        } catch(e) {
-            Alert.alert('Oops!', e, [
-                {text: 'OK', onPress: () => console.log('DELETE FAILED')},
-            ])
-        }
-    }
 
     const renderItem = (({item}) => {
         return (
             <View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('DisplayOneTrash', {id: item.id})}>
                     <Text>To: {item.to}</Text>
                     <Text>Subject: {item.subject}</Text>
                     <Text>{item.date}</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity onPress={handleDelete(item.id)}>
-                <Text>Delete</Text>
-                </TouchableOpacity> */}
             </View>
         )
     })

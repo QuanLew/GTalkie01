@@ -16,3 +16,12 @@ export async function markDeleteDraft(draft) {
         isDeleted: true
     });
 }
+
+export async function recoverDraft(draft) {
+    const uid = getUID()
+
+    await updateDoc(doc(database, `users/${uid}/drafts/` + draft),
+    {
+        isDeleted: false
+    });
+}

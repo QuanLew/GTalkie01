@@ -7,7 +7,7 @@ import getUID from '../components/getUID';
 import { doc, setDoc } from 'firebase/firestore';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-
+import axios from 'axios';
 
 const SendEmail = ({ navigation }: any) => {
     const [recipients, setRecipients] = useState('');
@@ -65,12 +65,7 @@ const SendEmail = ({ navigation }: any) => {
         //         sender,
         //         recipients,
         //         subject,
-        //         content,
-        //         currentDate,
-        //         currentTime,
-        //         isDraft,
-        //         isDeleted,
-        //         isStarred,
+        //         content
         //     })
         //     setLoading(false)
         //     setIsDraft(true)
