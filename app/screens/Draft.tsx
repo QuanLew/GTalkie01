@@ -37,6 +37,7 @@ const Draft = ({ navigation }: any) => {
                     <Text>To: {item.to}</Text>
                     <Text>Subject: {item.subject}</Text>
                     <Text>{item.date}</Text>
+                    <Text>Content: {item.content}</Text>
                 </TouchableOpacity>
             </View>
         )

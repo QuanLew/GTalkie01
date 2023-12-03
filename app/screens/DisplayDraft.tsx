@@ -38,6 +38,18 @@ const DisplayDraft = (item) => {
                 content: draft.content,
             });
             setLoading(false);
+            const sentDraft = { 
+                id: uuidv4(),
+                to: recipients,
+                subject: subject,
+                content: content,
+                date: currentDate,
+                time: currentTime,
+                isDraft: false,
+                isDeleted: false,
+                isStarred: false
+            }
+            await setDoc(doc(database,`users/${uid}/drafts/${sentDraft.id}`), sentDraft)
             Alert.alert('Whoosh!', 'Send successfully.', [
                 {text: 'OK', onPress: () => console.log('SENT.')},
               ]);

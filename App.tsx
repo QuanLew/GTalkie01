@@ -25,6 +25,7 @@ import ContactList from './app/screens/ContactList';
 import theme from './theme';
 import DisplayOneTrash from './app/screens/DisplayOneTrash';
 import History from './app/screens/History';
+import DisplayOneHistory from './app/screens/DisplayOneHistory'
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -52,6 +53,7 @@ function AfterLogin() {
             <Stack.Screen name="Trash" component={Trash} />
             <Stack.Screen name="DisplayOneTrash" component={DisplayOneTrash} />
             <Stack.Screen name="History" component={History} />
+            <Stack.Screen name="DisplayOneHistory" component={DisplayOneHistory} />
         </Stack.Navigator>
     );
 }
