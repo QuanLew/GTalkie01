@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "temporal-storm-407107",
+  "private_key_id": "9e447a064e1bc605b64320d4e3052b5751adb59a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC23h3Bk5IGwFV7\nqg2mFjRsUNnJn1o3AaHCvPJFLwygIIe6HOKdQXLiO3jrFM+7tZQhXbeyHUYbE/kt\n8y+CuihZSDCilsNaV1FY4rmF2zmw6GpO50D4n0a+aNQrqXeKgUww0NFZ2jUf9BWX\nXyfmRbV2aT1RhHcbIoHyfjGM0AEwmWxWLOzSN87Rj8YQyfs+bkAGI0IK9vVA5TT3\nEGl+2+/4SZb4+LMZly2cVh2+EmXRVNlIfW+RXslx4mU7brtlzsHrsM5Oe7SzmfwF\nnuw7JqZ+dzpyGrdY3D9g0rXXaQIsiI1xxG3C+njJVPHYRVk4eCj5senQd5d0uiFL\nGkRCuqB1AgMBAAECggEABmv/dIRXrPgFKH4c05fVCHbAZzW659KdWSbkhSx1T4xE\n5/LKvIYHYE2BXhQRhYCHbrKJWG5xv1Kwvf3bzcX208fWuWb8/kexuiLgLAS6Xm2T\nCilR3UlOpTIuPUhKw+jtgYtbxsGEexZJydKUJqCNElb4ycuSmTfZg2gOGmlVmVzC\np/lKY/imOjxNiNI9edDa/7O8LFNxHcvXJbD0LECBEMsadsul9RgkPHM3W8xeEN17\nlp09aj+qVOXwushpVrRRkDpLGzHb5ez4PR/e5CITosB6R4/vhuXC37ZKXRLH/Yal\nldIr477zX3+9tAFgVw6zXraK3846WDR6QKezURc3cwKBgQDx+5oxdVZaAbBs5L1m\naEB6J+qP6VQPzoDPv28sIQARvY1cpkgvt8oQebDroxaEpQvHDHym7p3Fgf4tRAV2\n3BKZSQgAQtJbs5bAVKb79XB8LSRgan39yRr5JQ6U0SbHAuGxxRg8mnnozC7nrEoy\nrEvXOQZyVFMpOTaJbhh3R9J+HwKBgQDBdeLx8tEVRtTczRUOvY9JyFahjRLNSHZr\n1QL40zBQNX0TPHx79UiZl/HM08U5aNiCgxlrF1DigT2++h7lT4sTYozZOcVeJALF\nG5JwE8Wm+NN83mB7n72ElPSsW4B1TYJAHtLSV6BqyZR4bkQxAr3fziN55LBX8B5g\ngr9mAK/m6wKBgQDf+bX62VSX8sBNylrUkuI7Lv8ZPSqlhsoLgHFyMwlRYlWZz/84\ny7CoFzr+n/GTzQBduN0X1f0KdwvA8hjsrz43yzUwqKj0YAHE+5Wj2MXI6i+lXmxH\nnwDsYrRgYka2JaCpXnjUf1cfdv5jSUFULc30479ny0099srX4aObpErcmQKBgE4q\nw7fe1Hw0Um2kr411KiA1wkskJSSs0qxfNQQ00KCX/CF5nxK22M62hgysxFOd+V1C\ne1K56QScE8bGaRVePmNmvmJG5WhURIo/ybtfQc1lXI5ni7RnprubNAEwN4ct+iLO\nUYCLx1VefY7rfsIOyYlUUSE/NcFSU/PK4GrmfCxhAoGAW2VEFlfIRBiSFL6Ul6tw\nPZNtADnKro/FfSjzBu1ZRnWdHBFsLRhhI8Rc5VH+++qFX0YGCUoBOKrdiTIVPN5z\n/FIWXm6FBjPVcG0D9HxAJMKGi/mTMI3P76YrUQeamQKIdzFURtX5M4ALrqfUVU5C\nNpTz5Nsy93ee50eS0Kb/cx8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "speechtotext-tutorial@temporal-storm-407107.iam.gserviceaccount.com",
+  "client_id": "114424357515484065235",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speechtotext-tutorial%40temporal-storm-407107.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

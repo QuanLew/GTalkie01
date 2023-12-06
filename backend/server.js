@@ -2,10 +2,22 @@ const express = require("express");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 const dotenv = require('dotenv');
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const path = require("path");
+// Imports the Google Cloud client library
+const speech = require("@google-cloud/speech");
+const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
+const ffmpeg = require("fluent-ffmpeg");
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 dotenv.config()
 
 const app = express();
+
+// Creates a client by Google Cloud
+const client = new speech.SpeechClient();
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
@@ -16,6 +28,79 @@ const mg = mailgun.client({
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(cors());
+
+app.get("/api/", (req, res) => {
+	res.json("Hello World");
+  });
+
+app.post("/api/transcribe", async (req, res) => {
+	try {
+	  const pathDesktop = "/Users/saran/Desktop/test1mp3.mp3";
+	  const receivedData = req.body;
+  
+	  const splitString = JSON.stringify(receivedData).split(":");
+	  const slicename = splitString[1].slice(2, -1).trim();
+	  const nameFile = slicename.split(".")[0].split("/").pop();
+  
+	  console.log(`Link URI: ${JSON.stringify(receivedData)}`);
+	  console.log("splice filename string: " + slicename);
+	  console.log("filename string: " + nameFile);
+  
+	  const audiosDir = "./audios";
+	  const outputPath = path.join(
+		audiosDir,
+		`${path.basename(`${nameFile}`, path.extname(`${nameFile}`))}.mp3`
+	  );
+  
+	  if (!fs.existsSync(slicename)) {
+		console.log("BAD");
+	  } else {
+		console.log("GOOD");
+	  }
+  
+	  ffmpeg(slicename)
+		.outputOptions("-vn", "-ab", "128k", "-ar", "44100")
+		.toFormat("mp3")
+		.save(outputPath)
+		.on("error", (err) => console.error(`Error converting file: ${err}`))
+		.on("end", () => console.log(`Converted ${nameFile}`));
+  
+	  // config audio
+	  const filename = pathDesktop;
+	  const encoding = "MP3";
+	  const sampleRateHertz = 16000;
+	  const languageCode = "en-US";
+  
+	  const config = {
+		encoding: encoding,
+		sampleRateHertz: sampleRateHertz,
+		languageCode: languageCode,
+	  };
+  
+	  const audio = {
+		content: fs.readFileSync(filename).toString("base64"),
+	  };
+  
+	  const request = {
+		config: config,
+		audio: audio,
+	  };
+  
+	  // Detects speech in the audio file
+	  const [response] = await client.recognize(request);
+	  const transcription = response.results
+		.map((result) => result.alternatives[0].transcript)
+		.join("\n");
+	  console.log("Transcription: ", transcription);
+  
+	  res.status(200).send({"transcription" : transcription});
+	} catch (error) {
+	  console.error("Error:", error);
+	  res.status(500).json({ error: "Internal Server Error" });
+	}
+});
 
 app.post('/api/email', (request, response)=>{
     const { sender, recipients, subject, content } = request.body;
