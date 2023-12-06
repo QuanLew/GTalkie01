@@ -2,12 +2,13 @@ import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet } from 'reac
 import React, { useEffect, useState } from 'react'
 import { auth, database } from '../../firebaseConfig'
 import Dialog from "react-native-dialog";
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 import getUID from '../components/getUID';
 import { doc, setDoc } from 'firebase/firestore';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import theme from '../../theme';
 
 const SendEmail = ({ navigation }: any) => {
     const [recipients, setRecipients] = useState('');
@@ -34,10 +35,10 @@ const SendEmail = ({ navigation }: any) => {
         var min = new Date().getMinutes(); //Current Minutes
         var sec = new Date().getSeconds(); //Current Seconds
         setCurrentDate(
-        date + '/' + month + '/' + year 
+            date + '/' + month + '/' + year
         )
         setCurrentTime(
-        hours + ':' + min + ':' + sec
+            hours + ':' + min + ':' + sec
         )
     }, []);
 
@@ -55,8 +56,8 @@ const SendEmail = ({ navigation }: any) => {
     const handleSubmit = async (e) => {
         if (!recipients || !subject || !content) {
             Alert.alert('Oops', 'Recipients, subject or message is missing.', [
-                {text: 'OK', onPress: () => console.log('Incompleted form')},
-              ]);
+                { text: 'OK', onPress: () => console.log('Incompleted form') },
+            ]);
         }
         try {
             setLoading(true)
@@ -69,7 +70,7 @@ const SendEmail = ({ navigation }: any) => {
             })
             setLoading(false)
             setIsDraft(true)
-            const draft = { 
+            const draft = {
                 id: uuidv4(),
                 to: recipients,
                 subject: subject,
@@ -80,9 +81,9 @@ const SendEmail = ({ navigation }: any) => {
                 isDeleted: false,
                 isStarred: false
             }
-            await setDoc(doc(database,`users/${uid}/drafts/${draft.id}`), draft)
+            await setDoc(doc(database, `users/${uid}/drafts/${draft.id}`), draft)
             Alert.alert('All set!', 'Your email was sent', [
-                {text: 'OK', onPress: () => console.log('SENT')},
+                { text: 'OK', onPress: () => console.log('SENT') },
             ]);
             navigation.goBack()
         } catch (e) {
@@ -93,7 +94,7 @@ const SendEmail = ({ navigation }: any) => {
 
     const saveDraft = async () => {
         if (recipients && subject && content) {
-            const draft = { 
+            const draft = {
                 id: uuidv4(),
                 to: recipients,
                 subject: subject,
@@ -104,55 +105,70 @@ const SendEmail = ({ navigation }: any) => {
                 isDeleted,
                 isStarred
             }
-            await setDoc(doc(database,`users/${uid}/drafts/${draft.id}`), draft)
+            await setDoc(doc(database, `users/${uid}/drafts/${draft.id}`), draft)
                 .then(docRef => {
                     Alert.alert('Nice work!', 'Draft saved.', [
-                        {text: 'OK', onPress: () => console.log('SAVED.')},
-                      ]);
+                        { text: 'OK', onPress: () => console.log('SAVED.') },
+                    ]);
                     setRecipients("")
                     setSubject("")
                     setContent("")
                 })
-            .catch(error => {
-                Alert.alert('Oops', error, [
-                    {text: 'OK', onPress: () => console.log('ERROR: ', error)},
-                  ]);
-            })
+                .catch(error => {
+                    Alert.alert('Oops', error, [
+                        { text: 'OK', onPress: () => console.log('ERROR: ', error) },
+                    ]);
+                })
         } else {
             Alert.alert('Oops', 'Email is incompleted.', [
-                {text: 'OK', onPress: () => console.log('Incompleted form')},
-              ]);
+                { text: 'OK', onPress: () => console.log('Incompleted form') },
+            ]);
         }
     }
 
     return (
-        <View>
+        <View style={[styles.container]}>
             <View>
-                <View>
-                    <Text>To: </Text>
-                    <TextInput autoCapitalize='none' clearTextOnFocus value={recipients} placeholder='abc@gmail.com' onChangeText={value=> setRecipients(value)} keyboardAppearance='default'/>
-                    <AntDesign name="contacts" size={24} color="black" onPress={() => {
-                        /* 1. Navigate to the Details route with params */
-                        navigation.navigate('ContactList', { callback: handleEmail })
-                        }}/>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, padding: 5, borderBottomWidth: 0.5 }}>
+                    <Text style={styles.title}>To: </Text>
+                    <TextInput
+                        style={{ flex: 1, marginLeft: 5, marginTop: 5 }} // Adjust the marginLeft value as needed
+                        autoCapitalize='none'
+                        clearTextOnFocus
+                        value={recipients}
+                        placeholder='abc@gmail.com'
+                        onChangeText={value => setRecipients(value)}
+                        keyboardAppearance='default'
+                    />
+                    <AntDesign
+                        name="contacts"
+                        size={24}
+                        color="#D6665C"
+                        onPress={() => {
+                            navigation.navigate('ContactList', { callback: handleEmail });
+                        }}
+                    />
                 </View>
-                <View>
-                    <Text>Subject: </Text>
-                    <TextInput autoCapitalize='sentences' clearTextOnFocus value={subject} placeholder='Subject' onChangeText={value=> setSubject(value)} keyboardAppearance='default' multiline/>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, padding: 5, borderBottomWidth: 0.5 }}>
+                    <Text style={styles.title}>Subject: </Text>
+                    <TextInput autoCapitalize='sentences' clearTextOnFocus value={subject} placeholder='Subject' onChangeText={value => setSubject(value)} keyboardAppearance='default' multiline />
                 </View>
-                <View>
-                    <Text>Message: </Text>
-                    <TextInput autoCapitalize='sentences' clearTextOnFocus value={content} placeholder='Message' onChangeText={value=> setContent(value)} keyboardAppearance='default' multiline />
+                <View style={{ marginHorizontal: 20, padding: 5, height: "70%", borderBottomWidth: 0.5 }}>
+                    <Text style={[styles.title]}>Message: </Text>
+                    <View style={{ flex: 1, paddingTop: 10 }}>
+                        <TextInput autoCapitalize='sentences' clearTextOnFocus value={content} placeholder='Message' onChangeText={value => setContent(value)} keyboardAppearance='default' multiline />
+                    </View>
                 </View>
             </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                    <Text style={styles.buttonText}>Send</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleSubmit}>
-                <Text>Send</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={saveDraft}>
-                <Text>Save Draft</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={saveDraft}>
+                    <Text style={styles.buttonText}>Save Draft</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -160,27 +176,51 @@ const SendEmail = ({ navigation }: any) => {
 export default SendEmail;
 
 const styles = StyleSheet.create({
-	container: {
-		marginHorizontal: 20
-	},
-	contact: {
-		flexDirection: 'row',
-		flex: 1,
-		alignItems: 'center'
-	},
-	contactText: {
-		flex: 1,
-		paddingHorizontal: 4,
-		height: 40,
-		borderWidth: 1,
-		borderRadius: 4,
-		padding: 10,
-	},
-	contactContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		backgroundColor: '#fff',
-		padding: 10,
-		marginVertical: 4
-	}
+    container: {
+        height: "100%",
+        backgroundColor: theme.colors.background,
+    },
+    title: {
+        fontSize: 20,
+        color: theme.colors.textPrimary,
+        fontFamily: "Fredoka",
+    },
+    paragraph: {
+        color: theme.colors.textPrimary,
+        textAlign: "center",
+        fontFamily: "Fredoka",
+    },
+    contact: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'center'
+    },
+    contactText: {
+        flex: 1,
+        paddingHorizontal: 4,
+        height: 40,
+        borderWidth: 1,
+        borderRadius: 4,
+        padding: 10,
+    },
+    contactContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        padding: 10,
+        marginVertical: 4
+    },
+    button: {
+        backgroundColor: "#DF7E7E",
+        borderRadius: 8,
+        padding: 20,
+        width: "42%",
+        marginLeft: "5%",
+        marginTop: "auto"
+    },
+    buttonText: {
+        textAlign: "center",
+        color: "#fff",
+        fontWeight: "bold",
+    },
 });

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, RefreshControl, Alert } from 'react-native'
+import { View, Text, FlatList, RefreshControl, Alert, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { collection, query, where } from 'firebase/firestore'
 import { database } from '../../firebaseConfig'
@@ -6,52 +6,86 @@ import getUID from '../components/getUID'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { getDrafts } from '../components/getDraft'
 import { useIsFocused } from '@react-navigation/native'
+import theme from '../../theme'
 
 // Get list of drafts
 const Trash = ({ navigation }: any) => {
-    const [trash, setTrash] = useState([])
-    const [refreshing, setRefreshing] = useState(true);
-    const isFocused = useIsFocused()
-    
-    const uid = getUID()
+  const [trash, setTrash] = useState([])
+  const [refreshing, setRefreshing] = useState(true);
+  const isFocused = useIsFocused()
 
-    useEffect(() => {
-        isFocused
-        getDrafts(q).then(setTrash);
-        setRefreshing(false)
-      },[isFocused])
+  const uid = getUID()
 
-    const q = query(collection(database, `users/${uid}/drafts/`),where("isDraft", "==", true), where("isDeleted", "==", true))
+  useEffect(() => {
+    isFocused
+    getDrafts(q).then(setTrash);
+    setRefreshing(false)
+  }, [isFocused])
 
-    const onRefresh = () => {
-        getDrafts(q).then(setTrash);
-    };
+  const q = query(collection(database, `users/${uid}/drafts/`), where("isDraft", "==", true), where("isDeleted", "==", true))
 
-    const renderItem = (({item}) => {
-        return (
-            <View>
-                <TouchableOpacity onPress={() => navigation.navigate('DisplayOneTrash', {id: item.id})}>
-                    <Text>To: {item.to}</Text>
-                    <Text>Subject: {item.subject}</Text>
-                    <Text>{item.date}</Text>
-                    <Text>Content: {item.content}</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    })
-    
+  const onRefresh = () => {
+    getDrafts(q).then(setTrash);
+  };
+
+  const renderItem = (({ item }) => {
     return (
-        <View>
-            <FlatList
-            data={trash}
-            renderItem={renderItem}
-            keyExtractor={data => data.id}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-            />
-        </View>
+      <View style={{ marginHorizontal: 20, padding: 5, paddingVertical: 15, borderBottomWidth: 0.5 }}>
+        <TouchableOpacity onPress={() => navigation.navigate('DisplayOneTrash', { id: item.id })}>
+          <View style={{ flexDirection: 'row', alignItems: "center" }}>
+            <Text style={styles.title}>To: </Text>
+            <Text style={styles.paragraph}>{item.to}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: "center" }}>
+            <Text style={styles.title}>Subject: </Text>
+            <Text style={styles.paragraph}>{item.subject}</Text>
+
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: "center" }}>
+            <Text style={styles.title}>Date: </Text>
+            <Text style={styles.paragraph}>{item.date}</Text>
+          </View>
+          <Text numberOfLines={1} style={styles.title}>Content: <Text style={styles.paragraph}>{item.content}</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
     )
+  })
+
+  return (
+    <View style={[styles.container, { alignItems: 'center' }]}>
+      <FlatList
+        data={trash}
+        renderItem={renderItem}
+        keyExtractor={data => data.id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+    </View>
+  )
 }
 
 export default Trash
+
+const styles = StyleSheet.create({
+  checkbox: {
+    margin: 8,
+  },
+  container: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: theme.colors.background,
+  },
+  title: {
+    fontSize: 20,
+    color: theme.colors.textPrimary,
+    fontWeight: "bold"
+  },
+  paragraph: {
+    color: theme.colors.textPrimary,
+    fontFamily: "Fredoka",
+    fontSize: 20,
+
+  },
+})

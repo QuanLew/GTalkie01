@@ -13,9 +13,9 @@ export default function Logout() {
   return (
     <View >
       <TouchableOpacity  style={{ flexDirection: "row"}} onPress={handleLogout}>
-      <MaterialIcons style= {{paddingLeft: 10}} name="logout" size={20} color="#D6665C" />
+      <MaterialIcons name="logout" size={20} color="#D6665C" />
       <Text style={[styles.paragraph ,{
-          textAlign: 'left',
+          textAlign: 'center',
           paddingLeft: 5,
           paddingBottom: 10
         }]}>
@@ -31,14 +31,6 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     backgroundColor: theme.colors.background,
-  },
-  title: {
-    fontSize: 20,
-    color: theme.colors.textPrimary,
-    textAlign: "center",
-    fontFamily: "Fredoka",
-    marginTop: 10,
-
   },
   paragraph: {
     color: theme.colors.textPrimary,

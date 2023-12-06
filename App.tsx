@@ -178,7 +178,9 @@ export default function App() {
     },
     headerTitleContainer: {
       color: theme.colors.textPrimary,
+
     },
     customHeaderStyle: {
         backgroundColor: theme.colors.background,
+
   }});
