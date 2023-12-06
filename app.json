@@ -13,6 +13,9 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      },
       "bundleIdentifier": "com.miquanle1006.GTalkie"
     },
     "web": {

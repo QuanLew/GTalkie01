@@ -1,10 +1,13 @@
 import {
+  SafeAreaView,
+  ScrollView,
   View,
   Text,
   Button,
   TouchableOpacity,
   Image,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Audio } from "expo-av";
@@ -18,10 +21,11 @@ const Main = ({ navigation }: any) => {
   const colours = ['red', 'orange', 'yellow', 'blue', 'green', 'indigo', 'violet'];
   const getColour = () => colours[Math.floor(Math.random() * colours.length)];
   const [borderColor, setBorderColor] = useState(getColour());
-  const [pathURI, setPathURI] = useState("");
+  const [plainemail, setPlainEmail] = useState("");
   const [recording, setRecording] = useState(null);
   const [recordings, setRecordings] = useState([]);
   const [transcription, setTranscription] = useState("");
+  const [loading, setLoading] = useState(false);
   
   async function startRecording() {
     try {
@@ -76,10 +80,10 @@ const Main = ({ navigation }: any) => {
         duration: getDurationFormatted(status.durationMillis),
         file: recording.getURI(),
       });
-      const uri = recording.getURI();
-      setPathURI(uri);
 
+      const uri = recording.getURI();
       const temp = await FileSystem.getInfoAsync(uri);
+
       if (!temp.exists) {
         console.log("Gif directory doesn't exist, creating…");
       } else {
@@ -87,6 +91,7 @@ const Main = ({ navigation }: any) => {
       }
       //console.log("Link type of URI: " + typeof uri);
       handleSubmit("http://localhost:4000/api/transcribe", uri);
+      handleAskAI("http://localhost:4000/api/ask", "How to change Fahrenheit to Celsius?");
       console.log("Recording stopped and stored at", uri);
 
       setRecordings(allRecordings);
@@ -105,6 +110,23 @@ const Main = ({ navigation }: any) => {
       const response = await axios.post(url, userData);
       setTranscription(response.data.transcription)
       console.log("res: " + transcription);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAskAI = async (url: string, userData: string) => {
+    try {
+      setLoading(true)
+      const response = await axios
+      .post(url, userData)
+      .then((res) => {
+        console.log("reppp here: "+res.data.message);
+        setPlainEmail(res.data.message);
+        setLoading(false)
+      })
+      
+      //console.log("AI reply back: " + response.data.message);
     } catch (error) {
       console.log(error);
     }
@@ -144,7 +166,8 @@ const Main = ({ navigation }: any) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
       <Text style={styles.title}>How can I help you?</Text>
       <Text style={styles.instructions}>
         Press and hold this button to record your voice. Release the button to
@@ -167,13 +190,19 @@ const Main = ({ navigation }: any) => {
         <Text style={styles.title}> {recording ? "Stop Recording\n\n\n" : "Start Recording\n\n\n"} </Text>
       </TouchableOpacity>
       <Text style={styles.title}>Your message: "{transcription}"</Text>
-      <TouchableOpacity style={{top:90, right:120}}>
+      { loading ?
+      <ActivityIndicator size="large"/> :
+      <Text style={styles.title}>Your result: "{plainemail}"</Text>
+      }
+      {/* <TouchableOpacity style={{top:90, right:120}}>
         <MaterialIcons name="record-voice-over" size={30} color="#D6665C" />
-      </TouchableOpacity>
-      <TouchableOpacity style={{top:60, left:120}} onPress={() => navigation.navigate("SendEmail")}>
+      </TouchableOpacity> */}
+      
+      </ScrollView>
+      <TouchableOpacity style={styles.keyboard} onPress={() => navigation.navigate("SendEmail")}>
         <FontAwesome5 name="keyboard" size={30} color="#D6665C" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -185,6 +214,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: theme.colors.background,
     padding: 20,
+  },
+  scrollView: {
+    marginHorizontal: 15,
   },
   instructions: {
     color: theme.colors.textPrimary,
@@ -212,4 +244,12 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 15,
   },
+  keyboard: {
+    position: "absolute",
+    bottom: 12,
+    // top:60, 
+    // left:120,
+
+
+  }
 });

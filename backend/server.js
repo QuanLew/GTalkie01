@@ -11,10 +11,28 @@ const speech = require("@google-cloud/speech");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
+// Imports the ChatAI library
+const { Configuration, OpenAI } = require("openai");
 
 dotenv.config()
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(cors());
+
+console.log("Config started")
+
+// Creates the config for OpenAI
+// const newConfig = new Configuration({
+//     apiKey: process.env.OPENAI_API_KEY,
+// });
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 // Creates a client by Google Cloud
 const client = new speech.SpeechClient();
@@ -25,11 +43,22 @@ const mg = mailgun.client({
 	key: process.env.MAILGUN_API_KEY,
 });
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}))
-app.use(express.static("public"));
-app.use(bodyParser.json());
-app.use(cors());
+console.log("Configuration is ready!")
+
+const getResponseAI = async (text) => {
+	const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+			{
+                role: "system",
+                content: "You are a helpful assistant."
+            },
+			{ role: "user", 
+			content: text, 
+			}],
+    });
+	return response.choices[0].message.content;
+}
 
 app.get("/api/", (req, res) => {
 	res.json("Hello World");
@@ -44,9 +73,9 @@ app.post("/api/transcribe", async (req, res) => {
 	  const slicename = splitString[1].slice(2, -1).trim();
 	  const nameFile = slicename.split(".")[0].split("/").pop();
   
-	  console.log(`Link URI: ${JSON.stringify(receivedData)}`);
-	  console.log("splice filename string: " + slicename);
-	  console.log("filename string: " + nameFile);
+	  //console.log(`Link URI: ${JSON.stringify(receivedData)}`);
+	  //console.log("splice filename string: " + slicename);
+	  //console.log("filename string: " + nameFile);
   
 	  const audiosDir = "./audios";
 	  const outputPath = path.join(
@@ -68,7 +97,8 @@ app.post("/api/transcribe", async (req, res) => {
 		.on("end", () => console.log(`Converted ${nameFile}`));
   
 	  // config audio
-	  const filename = pathDesktop;
+	  const filename = pathDesktop; //test data
+	//   const filename = slicename;
 	  const encoding = "MP3";
 	  const sampleRateHertz = 16000;
 	  const languageCode = "en-US";
@@ -101,6 +131,27 @@ app.post("/api/transcribe", async (req, res) => {
 	  res.status(500).json({ error: "Internal Server Error" });
 	}
 });
+
+app.post("/api/ask", async (req, res) => {
+	const receivedData = req.body;
+	const splitString = JSON.stringify(receivedData).split(":");
+	const userPrompt = splitString[0].trim();
+	//console.log("messge from ask: " + splitString)
+
+	try {
+		if (userPrompt == null) {
+		  throw new Error("Uh oh, no prompt was provided");
+		}
+		const response = await getResponseAI(userPrompt);
+		console.log("AI rep: " + response);
+		res.status(200).send({
+		  success: true,
+		  message: response,
+		});
+	} catch (error) {
+		console.log("ChatGPT error: " + error.message);
+	}
+})
 
 app.post('/api/email', (request, response)=>{
     const { sender, recipients, subject, content } = request.body;
