@@ -14,7 +14,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": ["audio"],
+        "NSMicrophoneUsageDescription": "We need access to your microphone for recording audio."
       },
       "bundleIdentifier": "com.miquanle1006.GTalkie"
     },
@@ -28,7 +29,8 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ],[
+      ],
+      [
         "expo-contacts",
         {
           "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
