@@ -37,9 +37,8 @@ const Trash = ({ navigation }: any) => {
             <Text style={styles.paragraph}>{item.to}</Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: "center" }}>
-            <Text style={styles.title}>Subject: </Text>
-            <Text style={styles.paragraph}>{item.subject}</Text>
-
+            <Text numberOfLines={1} style={styles.title}>Subject: <Text style={styles.paragraph}>{item.subject}</Text>
+            </Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: "center" }}>
             <Text style={styles.title}>Date: </Text>
@@ -53,7 +52,7 @@ const Trash = ({ navigation }: any) => {
   })
 
   return (
-    <View style={[styles.container, { alignItems: 'center' }]}>
+    <View style={[styles.container]}>
       <FlatList
         data={trash}
         renderItem={renderItem}

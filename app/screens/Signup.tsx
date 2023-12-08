@@ -19,54 +19,12 @@ const Signup = ({ navigation }: any) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [image, setImage] = useState(null);
 
-  const pickImage = async () => {
-    let imgURI = null;
-
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      imgURI = result.assets[0].uri;
-      setImage(imgURI);
-    }
-  };
-
-  const uploadImage = async (uri) => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const blob: any = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", uri, true);
-      xhr.send(null);
-    });
-
-    const ref = storage.ref(storage.getStorage(), "images/" + user.uid);
-
-    storage.uploadBytes(ref, blob);
-
-    storage.getDownloadURL(ref).then((url) => {
-      updateProfile(user, { photoURL: url });
-    });
-  };
 
   const handleSubmit = async () => {
     if (email && password && password == reenter_password && toggleCheckBox) {
       try {
         await createUserWithEmailAndPassword(auth, email, password).then(
           (res) => {
-            uploadImage(image);
             signOut(auth);
           }
         );
@@ -102,56 +60,20 @@ const Signup = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <View>
         <View>
-          <View style={{width:"15%"}}>
+          <View style={{ width: "15%" }}>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={styles.paragraph}>Back</Text>
             </TouchableOpacity>
           </View>
-          <Text style={[styles.title, { marginTop: 20, paddingBottom:10 }]}>
+          <Image
+            source={require("../../assets/icons/ios/new_icon.png")}
+            style={styles.icon}
+          />
+          <Text style={[styles.title, { paddingBottom: 10 }]}>
             Let's Get Started
           </Text>
         </View>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            width: "40%",
-            height: "23%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-          onPress={pickImage}
-        >
-          <View
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: 100,
-              backgroundColor: "lightgray",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {image ? (
-              <Image
-                source={{ uri: image, cache: "force-cache" }}
-                style={{
-                  resizeMode: "cover",
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: 100,
-                }}
-              />
-            ) : (
-              <View style={{ alignItems: "center" }}>
-                <Text style={[styles.paragraph]}>
-                  {image ? "Edit" : "Upload"} Image
-                </Text>
-                <AntDesign name="camera" size={20} color="black" />
-              </View>
-            )}
-          </View>
-        </TouchableOpacity>
-        <View style={{alignItems:"center"}}>
+        <View style={{ alignItems: "center" }}>
           <View style={styles.inputContainer}>
             <TextInput
               value={email}
@@ -216,7 +138,7 @@ const Signup = ({ navigation }: any) => {
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <View style={{ flexDirection: "row", justifyContent: "center", paddingTop:10 }}>
           <Text style={styles.paragraph}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.paragraph}>Sign in</Text>
@@ -235,12 +157,11 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: theme.colors.background,
   },
-  title: { 
+  title: {
     fontSize: 20,
     color: theme.colors.textPrimary,
     textAlign: "center",
     fontFamily: "Fredoka",
-    marginTop: 10,
   },
   paragraph: {
     color: theme.colors.textPrimary,
@@ -250,14 +171,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     resizeMode: "contain",
-    width: "50%",
+    width: "35%",
     height: "35%",
-    marginTop: 70,
-    marginLeft: "25%",
+    marginTop: 50,
+    alignSelf:"center"
   },
   inputContainer: {
     rowGap: 20,
-    marginTop: 20,
+    marginTop: -60,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -270,7 +191,7 @@ const styles = StyleSheet.create({
     padding: 20,
     width: "90%",
     marginLeft: "5%",
-    marginTop:"auto"
+    marginTop: "auto"
   },
   buttonText: {
     textAlign: "center",

@@ -33,16 +33,14 @@ const Draft = ({ navigation }: any) => {
 
   const renderItem = (({ item }) => {
     return (
-      <View style={{ marginHorizontal: 20, padding: 5, paddingVertical: 15, borderBottomWidth: 0.5}}>
+      <View style={{ marginHorizontal: 20, padding: 5, paddingVertical: 15, borderBottomWidth: 0.5 }}>
         <TouchableOpacity onPress={() => navigation.navigate('DisplayDraft', { id: item.id })}>
           <View style={{ flexDirection: 'row', alignItems: "center" }}>
             <Text style={styles.title}>To: </Text>
             <Text style={styles.paragraph}>{item.to}</Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: "center" }}>
-            <Text style={styles.title}>Subject: </Text>
-            <Text style={styles.paragraph}>{item.subject}</Text>
-
+            <Text numberOfLines={1} style={styles.title}>Subject: <Text  style={styles.paragraph}>{item.subject}</Text></Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: "center" }}>
             <Text style={styles.title}>Date: </Text>
@@ -56,7 +54,7 @@ const Draft = ({ navigation }: any) => {
   })
 
   return (
-    <View style={[styles.container, { alignItems: 'center' }]}>
+    <View style={[styles.container]}>
       <FlatList
         data={drafts}
         renderItem={renderItem}
@@ -79,6 +77,7 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     backgroundColor: theme.colors.background,
+    alignItems: "center",
   },
   title: {
     fontSize: 20,

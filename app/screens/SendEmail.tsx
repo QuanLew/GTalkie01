@@ -48,14 +48,14 @@ const SendEmail = ({ route, navigation }: any) => {
     var sec = new Date().getSeconds(); //Current Seconds
     setCurrentDate(date + "/" + month + "/" + year);
     setCurrentTime(hours + ":" + min + ":" + sec);
-    setSubject(infoEmail.headerEmail);
-    setContent(infoEmail.bodyEmail);
     setPassData(true);
-    console.log("subject objecttttt" + subject);
-    console.log("content objecttttt" + content);
     console.log("pass2");
   }, []);
-
+  useEffect(() => {
+    setSubject(infoEmail.headerEmail[0]);
+    setContent(infoEmail.bodyEmail[0]);
+  }, [infoEmail]);
+  
   const showDialog = () => {
     setVisible(true);
   };
@@ -155,7 +155,6 @@ const SendEmail = ({ route, navigation }: any) => {
           <TextInput
             style={{ flex: 1, marginLeft: 5, marginTop: 5 }} // Adjust the marginLeft value as needed
             autoCapitalize="none"
-            clearTextOnFocus
             value={recipients}
             placeholder="abc@gmail.com"
             onChangeText={(value) => setRecipients(value)}
@@ -182,7 +181,6 @@ const SendEmail = ({ route, navigation }: any) => {
           <Text style={styles.title}>Subject: </Text>
           <TextInput
             autoCapitalize="sentences"
-            clearTextOnFocus
             value={subject}
             placeholder="Subject"
             onChangeText={(value) => setSubject(value)}
