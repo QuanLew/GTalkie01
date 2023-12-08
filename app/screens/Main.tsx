@@ -18,18 +18,16 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import theme from "../../theme";
 
 const Main = ({ navigation }: any) => {
-  type Email = {
-    subject: string;
-    nameReceiver: string;
-    body: string;
-    nameSender: string;
-  };
+  interface Email {
+    headerEmail: Array<string>;
+    bodyEmail: Array<string>;
+    footerEmail: Array<string>;
+  }
 
-  const pushEmail: Email = {
-    subject: "string",
-    nameReceiver: "string",
-    body: "string",
-    nameSender: "string",
+  let pushEmail: Email = {
+    headerEmail: [],
+    bodyEmail: [],
+    footerEmail: [],
   };
 
   const hostname = "35.193.124.191";
@@ -46,14 +44,20 @@ const Main = ({ navigation }: any) => {
   const getColour = () => colours[Math.floor(Math.random() * colours.length)];
   const [borderColor, setBorderColor] = useState(getColour());
   const [plainemail, setPlainEmail] = useState("");
-  const [fixemail, setFixEmail] = useState({});
+  const [fixemail, setFixEmail] = useState<Email>({
+    headerEmail: [],
+    bodyEmail: [],
+    footerEmail: [],
+  });
   const [recording, setRecording] = useState(null);
   const [recordings, setRecordings] = useState([]);
   const [transcription, setTranscription] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingEmail, setLoadingEmail] = useState(false);
 
-  useEffect(() => {downloadAsset()}, []);
+  useEffect(() => {
+    downloadAsset();
+  }, []);
 
   const downloadAsset = async () => {
     const directory = `${FileSystem.cacheDirectory}ExponentAsset-b62641afc9ab487008e996a5c5865e56.ttf`;
@@ -138,145 +142,118 @@ const Main = ({ navigation }: any) => {
       handleSubmit("http://localhost:4000/api/transcribe", uri);
       //handleSubmit(`http://${hostname}:4000/api/transcribe`, uri);
       setRecordings(allRecordings);
-
     } catch (error) {
       console.error("Error stopping recording:", error);
     }
   }
 
   useEffect(() => {
-    console.log("Submit effect: " + transcription);
+    console.log("Submit trabscription effect: " + transcription);
   }, [transcription]);
 
   // handle user's voice
   const handleSubmit = async (url: string, userData: string) => {
     setLoading(true);
     await axios
-  .post(url, userData)
-  .then(function (response) {
-    console.log("Submit reppp here: " + response.data.transcription);
-    setTranscription(response.data.transcription);
-    setLoading(false);
-    //return response.data.transcription;
-    return "WRITE AN EMAIL FOR TEACHER"; // Pass the updated transcription to the next `then` block
-  })
-  .then(async function (updatedTranscription) {
-    console.log("Submit transcript the end: " + updatedTranscription);
-    await handleAskAI("http://localhost:4000/api/ask", updatedTranscription);
-    //await handleAskAI(`http://${hostname}:4000/api/ask`, updatedTranscription);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+      .post(url, userData)
+      .then(function (response) {
+        console.log("Submit reppp here: " + response.data.transcription);
+        setTranscription(response.data.transcription);
+        setLoading(false);
+        return response.data.transcription;
+        //return "WRITE AN EMAIL FOR TEACHER"; // Pass the updated transcription to the next `then` block
+      })
+      .then(async function (updatedTranscription) {
+        console.log("Submit transcript the end: " + updatedTranscription);
+        await handleAskAI(
+          "http://localhost:4000/api/ask",
+          updatedTranscription
+        );
+        //await handleAskAI(`http://${hostname}:4000/api/ask`, updatedTranscription);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   // handle users' voice to plain email
-  const handleAskAI = 
-    async (url: string, userData: string) => {
-      setLoadingEmail(true);
-      const checkmsg = userData.toLowerCase();
-      console.log("Submit msg: " + checkmsg);
-      const keywords = ["email", "letter", "send", "write", "weather"]; // add more keywords
-      if (!keywords.some((keyword) => checkmsg.includes(keyword))) {
-        console.log("Submit voice from users dont match with result");
-        setPlainEmail(
-          "I'm your email bot, ask me anything related to email"
-        );
-        setLoadingEmail(false);
-        return;
-      } else {
-        await axios
-          .post(url, userData)
-          .then(function (response) {
-            setPlainEmail(response.data.message);
-            return response.data.message;
-          })
-          .then(async function (updatedEmail) {
-            console.log("Submit get info email: " + updatedEmail);
-            getInfoEmail(updatedEmail);
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-          .finally(function () {
-            console.log("Submit end handle plain email");
-            setLoadingEmail(false);
-          });
-      }
+  const handleAskAI = async (url: string, userData: string) => {
+    setLoadingEmail(true);
+    const checkmsg = userData.toLowerCase();
+    console.log("Submit msg: " + checkmsg);
+    const keywords = ["email", "letter", "send", "write", "weather"]; // add more keywords
+    if (!keywords.some((keyword) => checkmsg.includes(keyword))) {
+      console.log("Submit voice from users dont match with requirement");
+      setPlainEmail("I'm your email bot, ask me anything related to email");
+      setLoadingEmail(false);
+      return;
+    } else {
+      await axios
+        .post(url, userData)
+        .then(function (response) {
+          setPlainEmail(response.data.message);
+          return response.data.message;
+        })
+        .then(async function (updatedEmail) {
+          console.log("Submit get info email: " + updatedEmail);
+          pushEmail = Object.assign({}, setInfoEmail(updatedEmail));
+          setFixEmail(pushEmail);
+          console.log(
+            `Submit push email: \n header = ${pushEmail.headerEmail} 
+            \n body = ${pushEmail.bodyEmail} 
+            \n footer = ${pushEmail.footerEmail}`
+          );
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .finally(function () {
+          console.log("Submit end handle plain email");
+          setLoadingEmail(false);
+        });
     }
+  };
 
-  function getInfoEmail(content: string){
+  function setInfoEmail(content: string): Email {
     const splitEmail = content.split(/\r?\n/);
-    const mainInfoEmail = splitEmail.filter(emp => emp);
-    
-    for(let i = 0; i < mainInfoEmail.length; i++) {
-      console.log(i+ "/ " + mainInfoEmail[i]);
+    const mainInfoEmail = splitEmail.filter((emp) => emp);
+
+    for (let i = 0; i < mainInfoEmail.length; i++) {
+      console.log(i + "/ " + mainInfoEmail[i]);
     }
 
     const infoEmail = {
       headerEmail: [],
       bodyEmail: [],
       footerEmail: [],
-    }
+    };
 
-    if(mainInfoEmail[0].includes("Subject")){
+    if (mainInfoEmail[0].includes("Subject")) {
+      const tempBody = [];
       infoEmail.headerEmail.push(mainInfoEmail[0].slice(9));
-      infoEmail.bodyEmail.push(...mainInfoEmail.slice(1));
-    }else {
+      tempBody.push(...mainInfoEmail.slice(1));
+      const keywordsFooter = [
+        "Best regards",
+        "Kind regards",
+        "Warm regards",
+        "Sincerely",
+        "Your sincerely",
+      ];
+      for (let i = 0; i < tempBody.length; i++) {
+        const temp = tempBody[i].toLowerCase();
+        if (
+          keywordsFooter.some((keyword) => temp.includes(keyword.toLowerCase()))
+        ) {
+          infoEmail.bodyEmail.push(...tempBody.slice(0, i));
+          infoEmail.footerEmail.push(...tempBody.slice(i));
+        }
+      }
+
+      infoEmail.footerEmail.push({});
+    } else {
       infoEmail.bodyEmail.push(...mainInfoEmail);
     }
-
-    for(let i = 0; i < infoEmail.headerEmail.length; i++) {
-      console.log("header: " + infoEmail.headerEmail[i]);
-    }
-
-    for(let i = 0; i < infoEmail.bodyEmail.length; i++) {
-      console.log("body: " + infoEmail.bodyEmail[i]);
-    }
-
     return infoEmail;
-
-    // const keywordsHeader = ["Dear", "Greeting", "Hello"];
-    // const keywordsFooter = ["Best regards", "Warm regards", "Kind regards"];
-
-    // const headerEmail = [];
-    // const footerEmail = [];
-    // const bodyEmail = [];
-
-    // console.log("Length: "+ mainInfoEmail.length)
-    // for(let i = 0; i < mainInfoEmail.length; i++) {
-    //   console.log(i+ "/ " + mainInfoEmail[i]);
-    //   if (keywordsHeader.some((keyword) => mainInfoEmail[i].includes(keyword))) {
-    //     headerEmail.push(mainInfoEmail[i]);
-    //   }
-    //   if (keywordsFooter.some((keyword) => mainInfoEmail[i].includes(keyword))) {
-    //     footerEmail.push.apply(mainInfoEmail.slice(i));
-    //     return;
-    //   }
-    // }
-
-    // for(let i = 0; i < footerEmail.length; i++) {
-    //   console.log("footer"+ "/ " + footerEmail[i]);
-    // }
-    
-    const headerPos = mainInfoEmail.indexOf("Subject");
-    const footerPos = mainInfoEmail.indexOf("Best regards," || "Kind regards,");
-    const bodyPos = footerPos - headerPos + 1;
-
-    console.log(`position email: ${headerPos} : ${bodyPos} : ${footerPos}`);
-
-    const headerEmail = mainInfoEmail[0];//mainInfoEmail[headerPos-1];
-    const footerEmail = mainInfoEmail.slice(8);
-    const bodyEmail = mainInfoEmail.slice(1,7);
-
-    console.log(`seperate email: \n header: ${headerEmail} \n body: ${bodyEmail} \n footer: ${footerEmail}`);
-    if(mainInfoEmail[0].includes("Subject:")){
-      mainInfoEmail[0] = mainInfoEmail[0].slice(8);
-      mainInfoEmail[1] = mainInfoEmail[1].slice(mainInfoEmail[1].indexOf("Dear")+1);
-      const i = 0;
-    }else{
-
-    }
   }
 
   function getDurationFormatted(milliseconds: number) {
@@ -365,14 +342,12 @@ const Main = ({ navigation }: any) => {
       <TouchableOpacity
         style={styles.keyboard}
         onPress={() =>
-          navigation.navigate("SendEmail", {
-            subject: "",
-            body: "",
-          })
+          navigation.navigate("SendEmail", { infoEmail: fixemail })
         }
       >
         <FontAwesome5 name="keyboard" size={30} color="#D6665C" />
       </TouchableOpacity>
+      {/* <Text style={styles.title}>Your info: "{fixemail.headerEmail}"</Text> */}
     </SafeAreaView>
   );
 };
