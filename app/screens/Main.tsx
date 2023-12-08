@@ -21,13 +21,13 @@ const Main = ({ navigation }: any) => {
   interface Email {
     headerEmail: Array<string>;
     bodyEmail: Array<string>;
-    footerEmail: Array<string>;
+    //footerEmail: Array<string>;
   }
 
   let pushEmail: Email = {
     headerEmail: [],
     bodyEmail: [],
-    footerEmail: [],
+    //footerEmail: [],
   };
 
   const hostname = "35.193.124.191";
@@ -47,7 +47,7 @@ const Main = ({ navigation }: any) => {
   const [fixemail, setFixEmail] = useState<Email>({
     headerEmail: [],
     bodyEmail: [],
-    footerEmail: [],
+    //footerEmail: [],
   });
   const [recording, setRecording] = useState(null);
   const [recordings, setRecordings] = useState([]);
@@ -198,10 +198,14 @@ const Main = ({ navigation }: any) => {
           console.log("Submit get info email: " + updatedEmail);
           pushEmail = Object.assign({}, setInfoEmail(updatedEmail));
           setFixEmail(pushEmail);
+          // console.log(
+          //   `Submit push email: \n header = ${pushEmail.headerEmail}
+          //   \n body = ${pushEmail.bodyEmail}
+          //   \n footer = ${pushEmail.footerEmail}`
+          // );
           console.log(
             `Submit push email: \n header = ${pushEmail.headerEmail} 
-            \n body = ${pushEmail.bodyEmail} 
-            \n footer = ${pushEmail.footerEmail}`
+            \n body = ${pushEmail.bodyEmail}`
           );
         })
         .catch(function (error) {
@@ -225,31 +229,31 @@ const Main = ({ navigation }: any) => {
     const infoEmail = {
       headerEmail: [],
       bodyEmail: [],
-      footerEmail: [],
+      //footerEmail: [],
     };
 
     if (mainInfoEmail[0].includes("Subject")) {
       const tempBody = [];
       infoEmail.headerEmail.push(mainInfoEmail[0].slice(9));
       tempBody.push(...mainInfoEmail.slice(1));
+      infoEmail.bodyEmail.push(...tempBody);
       const keywordsFooter = [
         "Best regards",
         "Kind regards",
         "Warm regards",
         "Sincerely",
         "Your sincerely",
+        "Warmest regards",
       ];
-      for (let i = 0; i < tempBody.length; i++) {
-        const temp = tempBody[i].toLowerCase();
-        if (
-          keywordsFooter.some((keyword) => temp.includes(keyword.toLowerCase()))
-        ) {
-          infoEmail.bodyEmail.push(...tempBody.slice(0, i));
-          infoEmail.footerEmail.push(...tempBody.slice(i));
-        }
-      }
-
-      infoEmail.footerEmail.push({});
+      // for (let i = 0; i < tempBody.length; i++) {
+      //   const temp = tempBody[i].toLowerCase();
+      //   if (
+      //     keywordsFooter.some((keyword) => temp.includes(keyword.toLowerCase()))
+      //   ) {
+      //     infoEmail.bodyEmail.push(...tempBody.slice(0, i));
+      //     //infoEmail.footerEmail.push(...tempBody.slice(i));
+      //   }
+      // }
     } else {
       infoEmail.bodyEmail.push(...mainInfoEmail);
     }

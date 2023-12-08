@@ -22,7 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(bodyParser.json());
-app.use(cors());
+//app.use(cors());
+app.use(cors({ origin: "exp://10.0.0.21:8081" }));
 
 console.log("Config started");
 
@@ -145,7 +146,7 @@ app.post("/api/ask", async (req, res) => {
     if (userPrompt == null) {
       throw new Error("Uh oh, no prompt was provided");
     }
-    const response = await getResponseAI("WRITE AN EMAIL FOR TEACHER");
+    const response = await getResponseAI(userPrompt);
     console.log("AI rep: " + response);
     res.status(200).send({
       success: true,

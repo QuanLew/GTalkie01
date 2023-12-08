@@ -34,9 +34,11 @@ const SendEmail = ({ route, navigation }: any) => {
 
   const { infoEmail } = route.params;
 
-  //console.log("Pass object email: " + infoEmail.headerEmail);
+  console.log("pass0");
+  console.log("Pass object email: " + infoEmail.headerEmail);
 
   useEffect(() => {
+    console.log("pass1");
     var date = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
     var year = new Date().getFullYear(); //Current Year
@@ -50,6 +52,8 @@ const SendEmail = ({ route, navigation }: any) => {
       setPassData(true);
     }
   }, []);
+
+  console.log("pass2");
 
   const showDialog = () => {
     setVisible(true);
@@ -125,7 +129,7 @@ const SendEmail = ({ route, navigation }: any) => {
         })
         .catch((error) => {
           Alert.alert("Oops", error, [
-            { text: "OK", onPress: () => console.log("ERROR: ", error) },
+            { text: "OK", onPress: () => console.log("ERROR123: ", error) },
           ]);
         });
     } else {
@@ -186,23 +190,6 @@ const SendEmail = ({ route, navigation }: any) => {
               clearTextOnFocus
               value={content}
               placeholder="Body"
-              onChangeText={(value) => setContent(value)}
-              keyboardAppearance="default"
-              multiline
-            />
-          )} */}
-        </View>
-        <View>
-          <Text>Footer: </Text>
-          <Text> {infoEmail.footerEmail} </Text>
-          {/* {isPassData ? (
-            <Text> {infoEmail.footerEmail} </Text>
-          ) : (
-            <TextInput
-              autoCapitalize="sentences"
-              clearTextOnFocus
-              value={content}
-              placeholder="Footer"
               onChangeText={(value) => setContent(value)}
               keyboardAppearance="default"
               multiline
