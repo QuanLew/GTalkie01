@@ -15,11 +15,13 @@ import { doc, setDoc } from "firebase/firestore";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import theme from "../../theme";
 
 const SendEmail = ({ route, navigation }: any) => {
+  const { infoEmail } = route.params;
   const [recipients, setRecipients] = useState("");
-  const [subject, setSubject] = useState("");
-  const [content, setContent] = useState("");
+  const [subject, setSubject] = useState(infoEmail.headerEmail);
+  const [content, setContent] = useState("Tri dep zzzzzz");
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,10 +34,9 @@ const SendEmail = ({ route, navigation }: any) => {
   const [isDeleted, setIsDeleted] = useState(false); // if delete, then true
   const [isStarred, setIsStarred] = useState(false); // if starred, then true
 
-  const { infoEmail } = route.params;
-
-  console.log("pass0");
   console.log("Pass object email: " + infoEmail.headerEmail);
+  // console.log("subject objecttttt" + subject);
+  // console.log("content objecttttt" + content);
 
   useEffect(() => {
     console.log("pass1");
@@ -47,13 +48,13 @@ const SendEmail = ({ route, navigation }: any) => {
     var sec = new Date().getSeconds(); //Current Seconds
     setCurrentDate(date + "/" + month + "/" + year);
     setCurrentTime(hours + ":" + min + ":" + sec);
-
-    if (Array.isArray(infoEmail.headerEmail) && infoEmail.headerEmail.length) {
-      setPassData(true);
-    }
+    setSubject(infoEmail.headerEmail);
+    setContent(infoEmail.bodyEmail);
+    setPassData(true);
+    console.log("subject objecttttt" + subject);
+    console.log("content objecttttt" + content);
+    console.log("pass2");
   }, []);
-
-  console.log("pass2");
 
   const showDialog = () => {
     setVisible(true);
@@ -138,13 +139,21 @@ const SendEmail = ({ route, navigation }: any) => {
       ]);
     }
   };
-
   return (
-    <View>
+    <View style={[styles.container]}>
       <View>
-        <View>
-          <Text>To: </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginHorizontal: 20,
+            padding: 5,
+            borderBottomWidth: 0.5,
+          }}
+        >
+          <Text style={styles.title}>To: </Text>
           <TextInput
+            style={{ flex: 1, marginLeft: 5, marginTop: 5 }} // Adjust the marginLeft value as needed
             autoCapitalize="none"
             clearTextOnFocus
             value={recipients}
@@ -155,56 +164,63 @@ const SendEmail = ({ route, navigation }: any) => {
           <AntDesign
             name="contacts"
             size={24}
-            color="black"
+            color="#D6665C"
             onPress={() => {
-              /* 1. Navigate to the Details route with params */
               navigation.navigate("ContactList", { callback: handleEmail });
             }}
           />
         </View>
-        <View>
-          <Text>Subject: </Text>
-          <Text> {infoEmail.headerEmail} </Text>
-          {/* {isPassData ? (
-            <Text> {infoEmail.headerEmail} </Text>
-          ) : (
-            <TextInput
-              autoCapitalize="sentences"
-              clearTextOnFocus
-              value={subject}
-              placeholder="Subject"
-              onChangeText={(value) => setSubject(value)}
-              keyboardAppearance="default"
-              multiline
-            />
-          )} */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginHorizontal: 20,
+            padding: 5,
+            borderBottomWidth: 0.5,
+          }}
+        >
+          <Text style={styles.title}>Subject: </Text>
+          <TextInput
+            autoCapitalize="sentences"
+            clearTextOnFocus
+            value={subject}
+            placeholder="Subject"
+            onChangeText={(value) => setSubject(value)}
+            keyboardAppearance="default"
+            multiline
+          />
         </View>
-        <View>
-          <Text>Body: </Text>
-          <Text> {infoEmail.bodyEmail} </Text>
-          {/* {isPassData ? (
-            <Text> {infoEmail.bodyEmail} </Text>
-          ) : (
+        <View
+          style={{
+            marginHorizontal: 20,
+            padding: 5,
+            height: "70%",
+            borderBottomWidth: 0.5,
+          }}
+        >
+          <Text style={[styles.title]}>Message: </Text>
+          <View style={{ flex: 1, paddingTop: 10 }}>
             <TextInput
               autoCapitalize="sentences"
               clearTextOnFocus
               value={content}
-              placeholder="Body"
+              placeholder="Message"
               onChangeText={(value) => setContent(value)}
               keyboardAppearance="default"
               multiline
             />
-          )} */}
+          </View>
         </View>
       </View>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Send</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text>Send</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={saveDraft}>
-        <Text>Save Draft</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={saveDraft}>
+          <Text style={styles.buttonText}>Save Draft</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -213,7 +229,18 @@ export default SendEmail;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 20,
+    height: "100%",
+    backgroundColor: theme.colors.background,
+  },
+  title: {
+    fontSize: 20,
+    color: theme.colors.textPrimary,
+    fontFamily: "Fredoka",
+  },
+  paragraph: {
+    color: theme.colors.textPrimary,
+    textAlign: "center",
+    fontFamily: "Fredoka",
   },
   contact: {
     flexDirection: "row",
@@ -234,5 +261,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
     marginVertical: 4,
+  },
+  button: {
+    backgroundColor: "#DF7E7E",
+    borderRadius: 8,
+    padding: 20,
+    width: "42%",
+    marginLeft: "5%",
+    marginTop: "auto",
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "#fff",
+    fontWeight: "bold",
   },
 });

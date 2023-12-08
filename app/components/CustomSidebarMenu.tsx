@@ -13,11 +13,14 @@ const CustomSidebarMenu = (props) => {
   const user = auth.currentUser;
 
   return (
-    <SafeAreaView style={[ styles.container ,{ flex: 1 }]}>
+    <SafeAreaView style={[ styles.container
+  ]}>
+    <View style={{ alignItems:"center", padding: 40,borderBottomWidth: 0.5,
+    borderBottomColor: "black",}}>
       {user.photoURL ? (
         <Image
           source={{ uri: user.photoURL }}
-          style={{ width: 110, height: 110 }}
+          style={{ width: 110, height: 110 , borderRadius: 100,}}
         />
       ) : (
         <Image
@@ -25,22 +28,30 @@ const CustomSidebarMenu = (props) => {
           style={{ width: 110, height: 110 }}
         />
       )}
+      </View>
       <DrawerContentScrollView {...props}> 
-        <View style={{ flex: 1}}>
-          {props.state.routes.map((route, index) => (
-            <DrawerItem
-              key={index}
-              labelStyle={{
-                color: "#D6665C",
-              }}
-              label={route.name}
-              onPress={() => {
-                props.navigation.navigate(route.name);
-              }}
-            />
-          ))}
-        </View>
+      <View style={{marginTop: -20}}>
+  {props.state.routes.map((route, index) => (
+    route.name !== "Welcome" && (
+      <DrawerItem
+        key={index}
+        labelStyle={{
+          color: "#D6665C",
+          textAlign: "center",
+          fontSize: 16,
+          fontWeight: "bold",
+          left: 10
+        }}
+        label={route.name}
+        onPress={() => {
+          props.navigation.navigate(route.name);
+        }}
+      />
+    )
+  ))}
+</View>
       </DrawerContentScrollView>
+      <View style={{ alignItems:"center"}}>
       <Logout />
       <Text
         style={{
@@ -51,6 +62,7 @@ const CustomSidebarMenu = (props) => {
       >
         Copyright 2023
       </Text>
+      </View>
     </SafeAreaView>
   );
 };
@@ -76,7 +88,7 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     backgroundColor: theme.colors.background,
-  },
+    },
 });
 
 export default CustomSidebarMenu;
