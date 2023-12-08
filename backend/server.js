@@ -59,10 +59,12 @@ const getResponseAI = async (text) => {
   return response.choices[0].message.content;
 };
 
+// endpoint for checking alive url
 app.get("/api/", (req, res) => {
   res.json("Hello World");
 });
 
+// endpoint for transcribe user's voice to plain text
 app.post("/api/transcribe", async (req, res) => {
   try {
     //const pathDesktop = "/Users/saran/Desktop/test1mp3.mp3";
@@ -77,28 +79,28 @@ app.post("/api/transcribe", async (req, res) => {
     //console.log("splice filename string: " + slicename);
     //console.log("filename string: " + nameFile);
 
-    // const audiosDir = "./audios";
-    // const outputPath = path.join(
-    //   audiosDir,
-    //   `${path.basename(`${nameFile}`, path.extname(`${nameFile}`))}.mp3`
-    // );
+    const audiosDir = "./audios";
+    const outputPath = path.join(
+      audiosDir,
+      `${path.basename(`${nameFile}`, path.extname(`${nameFile}`))}.mp3`
+    );
 
-    // if (!fs.existsSync(slicename)) {
-    //   console.log("BAD");
-    // } else {
-    //   console.log("GOOD");
-    // }
+    if (!fs.existsSync(slicename)) {
+      console.log("BAD");
+    } else {
+      console.log("GOOD");
+    }
 
-    // ffmpeg(slicename)
-    //   .outputOptions("-vn", "-ab", "128k", "-ar", "44100")
-    //   .toFormat("mp3")
-    //   .save(outputPath)
-    //   .on("error", (err) => console.error(`Error converting file: ${err}`))
-    //   .on("end", () => console.log(`Converted ${nameFile}`));
+    ffmpeg(slicename)
+      .outputOptions("-vn", "-ab", "128k", "-ar", "44100")
+      .toFormat("mp3")
+      .save(outputPath)
+      .on("error", (err) => console.error(`Error converting file: ${err}`))
+      .on("end", () => console.log(`Converted ${nameFile}`));
 
     // config audio
-    const filename = pathDesktop; //test data
-    //   const filename = slicename;
+    // const filename = pathDesktop; //test data
+    const filename = slicename;
     const encoding = "MP3";
     const sampleRateHertz = 16000;
     const languageCode = "en-US";
@@ -132,6 +134,7 @@ app.post("/api/transcribe", async (req, res) => {
   }
 });
 
+// endpoint for convert plain text to plain email
 app.post("/api/ask", async (req, res) => {
   const receivedData = req.body;
   const splitString = JSON.stringify(receivedData).split(":");
@@ -142,7 +145,7 @@ app.post("/api/ask", async (req, res) => {
     if (userPrompt == null) {
       throw new Error("Uh oh, no prompt was provided");
     }
-    const response = await getResponseAI(userPrompt);
+    const response = await getResponseAI("WRITE AN EMAIL FOR TEACHER");
     console.log("AI rep: " + response);
     res.status(200).send({
       success: true,
@@ -153,6 +156,7 @@ app.post("/api/ask", async (req, res) => {
   }
 });
 
+// endpoint for sending an email to client
 app.post("/api/email", (request, response) => {
   const { sender, recipients, subject, content } = request.body;
 
