@@ -6,7 +6,7 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { auth, database } from "../../firebaseConfig";
 import Dialog from "react-native-dialog";
 import { AntDesign } from "@expo/vector-icons";
@@ -20,8 +20,8 @@ import theme from "../../theme";
 const SendEmail = ({ route, navigation }: any) => {
   const { infoEmail } = route.params;
   const [recipients, setRecipients] = useState("");
-  const [subject, setSubject] = useState(infoEmail.headerEmail);
-  const [content, setContent] = useState("Tri dep zzzzzz");
+  const [subject, setSubject] = useState(infoEmail.headerEmail[0]);
+  const [content, setContent] = useState(infoEmail.bodyEmail.join(" "));
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,11 +35,10 @@ const SendEmail = ({ route, navigation }: any) => {
   const [isStarred, setIsStarred] = useState(false); // if starred, then true
 
   console.log("Pass object email: " + infoEmail.headerEmail);
-  // console.log("subject objecttttt" + subject);
-  // console.log("content objecttttt" + content);
+  console.log("Subject objecttttt: " + subject);
+  console.log("Content objecttttt: " + content);
 
   useEffect(() => {
-    console.log("pass1");
     var date = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
     var year = new Date().getFullYear(); //Current Year
@@ -48,14 +47,13 @@ const SendEmail = ({ route, navigation }: any) => {
     var sec = new Date().getSeconds(); //Current Seconds
     setCurrentDate(date + "/" + month + "/" + year);
     setCurrentTime(hours + ":" + min + ":" + sec);
-    setPassData(true);
-    console.log("pass2");
   }, []);
+
   useEffect(() => {
     setSubject(infoEmail.headerEmail[0]);
-    setContent(infoEmail.bodyEmail[0]);
+    setContent(infoEmail.bodyEmail.join("\n"));
   }, [infoEmail]);
-  
+
   const showDialog = () => {
     setVisible(true);
   };
@@ -139,6 +137,26 @@ const SendEmail = ({ route, navigation }: any) => {
       ]);
     }
   };
+
+  const textInputRef = useRef();
+  const handleSubjectChange = (newText) => {
+    if (textInputRef.current) {
+      const { selection } = textInputRef.current;
+      const newSubject =
+        subject.slice(0, selection.start) +
+        newText +
+        subject.slice(selection.end);
+
+      setSubject(newSubject);
+
+      // Move the cursor to the end of the inserted text
+      const newPosition = selection.start + newText.length;
+      textInputRef.current.setNativeProps({
+        selection: { start: newPosition, end: newPosition },
+      });
+    }
+  };
+
   return (
     <View style={[styles.container]}>
       <View>
@@ -155,6 +173,7 @@ const SendEmail = ({ route, navigation }: any) => {
           <TextInput
             style={{ flex: 1, marginLeft: 5, marginTop: 5 }} // Adjust the marginLeft value as needed
             autoCapitalize="none"
+            clearTextOnFocus
             value={recipients}
             placeholder="abc@gmail.com"
             onChangeText={(value) => setRecipients(value)}
@@ -200,7 +219,6 @@ const SendEmail = ({ route, navigation }: any) => {
           <View style={{ flex: 1, paddingTop: 10 }}>
             <TextInput
               autoCapitalize="sentences"
-              clearTextOnFocus
               value={content}
               placeholder="Message"
               onChangeText={(value) => setContent(value)}
