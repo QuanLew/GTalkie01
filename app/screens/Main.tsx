@@ -30,7 +30,7 @@ const Main = ({ navigation }: any) => {
     //footerEmail: [],
   };
 
-  const hostname = "35.193.124.191";
+  //const hostname = "35.193.124.191";
   const colours = [
     "red",
     "orange",

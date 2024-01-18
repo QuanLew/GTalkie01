@@ -62,7 +62,7 @@ const getResponseAI = async (text) => {
 
 // endpoint for checking alive url
 app.get("/api/", (req, res) => {
-  res.json("Hello World");
+  res.status(200).send("Hello World! Successfully!");
 });
 
 // endpoint for transcribe user's voice to plain text

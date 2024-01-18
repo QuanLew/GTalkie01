@@ -20,8 +20,10 @@
     "fluent-ffmpeg": "^2.1.2",
     "form-data": "^4.0.0",
     "mailgun.js": "^9.3.0",
-    "nodemon": "^3.0.2",
     "openai": "^4.20.1",
     "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }
